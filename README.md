@@ -1,6 +1,6 @@
 # Smart Cart
 
-Web application with a Node.js REST API includes tokens authentication and refreshing, requests logger for analysis, MongoDB replica set with caching database using Redis Master-Slave Replication, and Nginx for load balancer.
+Web application with a Node.js REST API includes tokens authentication and refreshing, requests logger for analysis, MongoDB replica set with caching database, and Nginx for load balancer.
 Frontend developed using React, Redux, reduxjs/toolkit and Bootstrap.
 
 
