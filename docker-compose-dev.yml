@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    restart: always
+    networks:
+      - api-network
+    env_file:
+      - ./api/.env.development
+    volumes:
+      - /usr/src/app/node_modules
+      - ./api:/usr/src/app
+      - ./api/logs:/usr/src/app/logs
+    ports:
+      - 7743:7743
+
+  # tests:
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile.tests
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./api/.env.tests
+  #   volumes:
+  #     - /usr/src/app/node_modules
+  #     - ./api:/usr/src/app
+  #   ports:
+  #     - 8843:8843
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    networks:
+      - api-network
+    depends_on:
+      - api
+    volumes:
+      - /usr/src/app/node_modules
+      - ./frontend:/usr/src/app
+    ports:
+      - 3000:3000
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    depends_on:
+      - api
+      - frontend
+    networks:
+      - api-network
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+networks:
+  api-network:
+    external: true
+    name: api-network

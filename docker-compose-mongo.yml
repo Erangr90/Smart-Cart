@@ -1,0 +1,55 @@
+version: '3.9'
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:latest
+    volumes:
+      - ./scripts/mongo/rs-init.sh:/scripts/rs-init.sh
+      - ./mongo/data1:/data/db
+    networks:
+      - api-network
+      - mongo-network
+    ports:
+      - 27017:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod" ,"--bind_ip_all", "--replSet", "dbrs"]
+
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:latest
+    volumes:
+      - ./mongo/data2:/data/db
+    ports:
+      - 27018:27017
+    restart: always
+    networks:
+      - mongo-network
+    entrypoint: [ "/usr/bin/mongod" ,"--bind_ip_all", "--replSet", "dbrs"]
+
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:latest
+    volumes:
+      - ./mongo/data3:/data/db
+    ports:
+      - 27019:27017
+    restart: always
+    networks:
+      - mongo-network
+    entrypoint: [ "/usr/bin/mongod" ,"--bind_ip_all", "--replSet", "dbrs"]
+
+
+volumes:
+  mongo1: {}
+  mongo2: {}
+  mongo3: {}
+
+
+networks:
+  mongo-network:
+    driver: bridge
+  api-network:
+    external: true
+    name: api-network

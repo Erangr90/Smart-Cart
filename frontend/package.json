@@ -1,0 +1,50 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://nginx:80",
+  "dependencies": {
+    "@testing-library/jest-dom": "*",
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-scripts": "*",
+    "web-vitals": "*",
+    "@paypal/react-paypal-js": "*",
+    "@reduxjs/toolkit": "*",
+    "axios": "*",
+    "bootstrap": "*",
+    "react-bootstrap": "*",
+    "react-helmet-async": "*",
+    "react-icons": "*",
+    "react-redux": "*",
+    "react-router-bootstrap": "*",
+    "react-router-dom": "*",
+    "react-toastify": "*"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
