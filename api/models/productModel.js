@@ -57,11 +57,11 @@ const productSchema = mongoose.Schema(
     //       message: props => `${props.value} exceeds the bounders of 2-25 characters`
     //     }
     // },
-    category:[ {
+    category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
       // required: true
-    }],
+    },
     prices: [
       {
         type: mongoose.Schema.Types.ObjectId,

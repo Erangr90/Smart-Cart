@@ -16,42 +16,42 @@ const Header = () => {
 
   const adminMenu = [
     {
-    name:"משתמשים",
-    route:"users"
+      name: "משתמשים",
+      route: "users"
     },
     {
-      name:"קטגוריות",
-      route:"categories"
+      name: "קטגוריות",
+      route: "categories"
     },
     {
-      name:"חנויות",
-      route:"stores"
+      name: "חנויות",
+      route: "stores"
     },
     {
-      name:"רשתות",
-      route:"chains"
+      name: "רשתות",
+      route: "chains"
     },
     {
-      name:"הזמנות",
-      route:"orders"
+      name: "הזמנות",
+      route: "orders"
     },
     {
-      name:"מחירים",
-      route:"prices"
+      name: "מחירים",
+      route: "prices"
     },
     {
-      name:"מוצרים",
-      route:"products"
+      name: "מוצרים",
+      route: "products/page/1"
     },
     {
-      name:"מנויים",
-      route:"subscriptions"
+      name: "מנויים",
+      route: "subscriptions"
     },
     {
-      name:"יחידות מידה",
-      route:"unitsOfMeasure"
+      name: "יחידות מידה",
+      route: "unitsOfMeasure"
     }
-  ]
+  ];
 
   const [logoutApiCall] = useLogoutMutation();
 
@@ -71,14 +71,14 @@ const Header = () => {
         <Container>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <LinkContainer to="/">
-            <Navbar.Brand className="ms-auto">
-              <img src={logo} alt="העגלה שלי" />
-              העגלה שלי
-            </Navbar.Brand>
-          </LinkContainer>
+            <LinkContainer to="/">
+              <Navbar.Brand className="ms-auto">
+                <img src={logo} alt="העגלה שלי" />
+                העגלה שלי
+              </Navbar.Brand>
+            </LinkContainer>
             <Nav className="me-auto">
-            {userInfo ? (
+              {userInfo ? (
                 <>
                   <NavDropdown
                     title={userInfo.firstName + " " + userInfo.lastName}
@@ -102,7 +102,7 @@ const Header = () => {
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="ניהול" id="adminMenu">
                   {
-                    adminMenu.map((x,i)=>(
+                    adminMenu.map((x, i) => (
                       <LinkContainer key={i} to={`/admin/${x.route}`}>
                         <NavDropdown.Item>{x.name}</NavDropdown.Item>
                       </LinkContainer>

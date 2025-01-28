@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { LinkContainer } from "react-router-bootstrap";
 // BootStrap
-import { Form, Button, Table, Stack } from 'react-bootstrap';
-import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { Form, Button, Table, Stack, InputGroup } from 'react-bootstrap';
+import { FaTrash } from "react-icons/fa";
 
 // Components
 import Message from '../../../components/Message';
@@ -23,6 +23,7 @@ import {
   useGetProductsQuery,
 } from "../../../slices/productsApiSlice";
 
+
 const EditCategory = () => {
   // State variables
   const { id: categoryId } = useParams('');
@@ -30,6 +31,7 @@ const EditCategory = () => {
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState([]);
   const [search, setSearch] = useState('');
+  const [keyword, setKeyword] = useState('');
   const [addProdId, setAddProdId] = useState('');
   const navigate = useNavigate();
 
@@ -82,10 +84,10 @@ const EditCategory = () => {
       }
     }
   };
+
   // Add product
   const [addProductToCategory] = useAddProductToCategoryMutation();
   const AddProductHandler = async () => {
-    console.log(categoryId, addProdId);
     if (window.confirm("האם אתה בטוח?")) {
       try {
         await addProductToCategory({ categoryId, productId: addProdId });
@@ -108,6 +110,21 @@ const EditCategory = () => {
     }
   }, [shouldFetch, data]);
 
+  const submitHandler2 = (e) => {
+    e.preventDefault();
+    if (keyword.trim() !== "") {
+      console.log(keyword);
+      let temp = [];
+      for (const prod of products) {
+        if (prod.name.includes(keyword) || prod.manufacturer.includes(keyword) || prod.barcode.includes(keyword) || prod.description.includes(keyword)) {
+          temp.push(prod);
+        }
+      }
+      setProducts(temp);
+    } else {
+      setProducts(category.products);
+    }
+  };
 
   return (
     <>
@@ -137,55 +154,58 @@ const EditCategory = () => {
             <Button type='submit' variant='primary'>
               עדכון
             </Button>
-
-            {
-              products && products.length > 0 ? (
-                <Form.Group className='my-2' controlId='productsList'>
-                  <Form.Label>רשימת מוצרים</Form.Label>
-                  <Table striped bordered hover responsive className="table-sm">
-                    <thead>
-                      <tr>
-                        <th>שם</th>
-                        <th>תיאור</th>
-                        <th>יצרן</th>
-                        <th>מדינה</th>
-                        <th>ברקוד</th>
-                        <th>כמות</th>
-                        <th></th>
+            <InputGroup className='my-3'>
+              <Form.Control
+                type='text'
+                name='q'
+                onChange={(e) => setKeyword(e.target.value)}
+                value={keyword}
+                placeholder='חיפוש...'
+                className='mr-sm-2 ml-sm-5'
+              />
+              <Button onClick={submitHandler2} variant='outline-success' className='p-2 mx-2'>
+                מצא
+              </Button>
+            </InputGroup>
+            {products && products.length > 0 ? (
+              <Form.Group className='my-2' controlId='productsList'>
+                <Form.Label>רשימת מוצרים</Form.Label>
+                <Table striped bordered hover responsive className="table-sm">
+                  <thead>
+                    <tr>
+                      <th>שם</th>
+                      <th>תיאור</th>
+                      <th>יצרן</th>
+                      <th>מדינה</th>
+                      <th>ברקוד</th>
+                      <th>כמות</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((product) => (
+                      <tr key={product._id}>
+                        <td>{product.name}</td>
+                        <td>{product.description}</td>
+                        <td>{product.manufacturer}</td>
+                        <td>{product.country + " " + product.country_code}</td>
+                        <td>{product.barcode}</td>
+                        <td>{product.measure + " " + product.unitOfMeasure}</td>
+                        <td>
+                          <Button
+                            variant="danger"
+                            className="btn-sm"
+                            onClick={() => deleteHandler(product._id)}
+                          >
+                            <FaTrash style={{ color: "white" }} />
+                          </Button>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {products.map((product) => (
-                        <tr key={product._id}>
-                          {/* <td>{product.category.name}</td> */}
-                          <td>
-                            {product.name}
-                          </td>
-                          <td>{product.description}</td>
-                          <td>{product.manufacturer}</td>
-                          <td>{product.country + " " + product.country_code}</td>
-                          <td>{product.barcode}</td>
-                          <td>{product.measure + " " + product.unitOfMeasure}</td>
-                          {/* <td>{product.price.number}</td> */}
-                          <td>
-                            <>
-                              <Button
-                                variant="danger"
-                                className="btn-sm"
-                                onClick={() => deleteHandler(product._id)}
-                              >
-                                <FaTrash style={{ color: "white" }} />
-                              </Button>
-                            </>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-
-                </Form.Group>
-              ) : (null)
-            }
+                    ))}
+                  </tbody>
+                </Table>
+              </Form.Group>
+            ) : null}
           </Form>
         )}
       </FormContainer>
@@ -207,19 +227,17 @@ const EditCategory = () => {
             value={addProdId}
             aria-label="Default select example">
             <option>בחר מוצר</option>
-
-            {
-              searchProducts.map((prod) => (
-                <option key={prod._id} value={prod._id}>{prod.name + " - " + prod.description + " - " + prod.manufacturer + " - " + prod.barcode}</option>
-              ))
-            }
+            {searchProducts.map((prod) => (
+              <option key={prod._id} value={prod._id}>
+                {prod.name + " - " + prod.description + " - " + prod.manufacturer + " - " + prod.barcode}
+              </option>
+            ))}
           </Form.Select>
         </Stack>
-        <Button className="my-3" variant='primary' onClick={() => AddProductHandler()}>
+        <Button className="my-3" variant='primary' onClick={AddProductHandler}>
           הוספה
         </Button>
       </FormContainer>
-
     </>
   );
 };

@@ -121,9 +121,8 @@ const router = createBrowserRouter(
         <Route path='/admin/price/:id/edit' element={<EditPrice />} />
         <Route path='/admin/price/create' element={<CreatePrice />} />
         {/* Products */}
-        <Route path='/admin/products' element={<ProductsList />} />
+        <Route path='/admin/products/page/:pageNumber' element={<ProductsList />} />
         <Route exact path='/admin/products/search/:keyword/page/:pageNumber' element={<ProductsList />} />
-        <Route exact path='/admin/products/category/:category/page/:pageNumber' element={<ProductsList />} />
         {/* <Route
           path='/admin/products/search/:keyword/page/:pageNumber'
           element={<ProductsList />}

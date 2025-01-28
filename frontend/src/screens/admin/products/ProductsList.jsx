@@ -57,7 +57,6 @@ const ProductsList = () => {
       }
     }
   };
-  console.log(data);
   return (
     <>
       <h1>מוצרים</h1>
@@ -71,7 +70,6 @@ const ProductsList = () => {
         <>
           <div className="d-flex justify-content-between">
             <SearchBox route={"/admin/products"} pageNumber={pageNumber = 1} />
-            <CategorySearchBox route={"/admin/products"} pageNumber={pageNumber = 1} />
             <Button type='button' variant='warning' className='my-3' onClick={createProductHandler}>
               צור מוצר חדש
             </Button>
@@ -129,7 +127,6 @@ const ProductsList = () => {
           <Paginate
             page={data.page}
             keyword={keyword || ""}
-            category={category || ""}
             pages={data.pages}
             isAdmin={true}
             route={"products"}

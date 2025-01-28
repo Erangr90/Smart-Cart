@@ -19,7 +19,7 @@ const EditProduct = () => {
   const { id: productId } = useParams();
   const [name, setName] = useState('');
   const [manufacturer, setManufacturer] = useState('');
-  const [category, setCategory] = useState({});
+  const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [barcode, setBarcode] = useState('');
   const [unitOfMeasure, setUnitOfMeasure] = useState('');
@@ -75,6 +75,7 @@ const EditProduct = () => {
       setCountry_code(product.country_code);
     }
   }, [product]);
+
 
   const uploadFileHandler = async (e) => {
     const formData = new FormData();
