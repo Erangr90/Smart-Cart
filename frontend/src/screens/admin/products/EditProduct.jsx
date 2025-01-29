@@ -49,7 +49,7 @@ const EditProduct = () => {
         await updateProduct({ productId, name, manufacturer, category, description, barcode, unitOfMeasure, measure, country, country_code, image }).unwrap();
         toast.success('product updated successfully');
         refetch();
-        navigate('/admin/products');
+        navigate('/admin/products/page/1');
       } catch (err) {
         console.log(err?.data?.message || err.error);
       }
@@ -157,6 +157,7 @@ const EditProduct = () => {
               <Form.Label>יצרן</Form.Label>
               <Form.Control
                 type='name'
+                value={manufacturer}
                 onChange={(e) => setManufacturer(e.target.value)}
               ></Form.Control>
             </Form.Group>

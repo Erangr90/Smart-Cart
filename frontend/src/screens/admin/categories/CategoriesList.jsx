@@ -94,7 +94,7 @@ const CategoriesList = () => {
                     <td>{category.name}</td>
                     <td>
                       <LinkContainer
-                        to={`/admin/category/${category._id}/edit`}
+                        to={`/admin/category/${category._id}/edit/page/1`}
                         style={{ marginRight: "10px" }}
                       >
                         <Button variant="light" className="btn-sm mx-2">

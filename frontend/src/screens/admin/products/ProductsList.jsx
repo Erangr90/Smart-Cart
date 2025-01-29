@@ -13,7 +13,6 @@ import {
 import { toast } from "react-toastify";
 import Paginate from "../../../components/Paginate";
 import SearchBox from "../../../components/SearchBox";
-import CategorySearchBox from "../../../components/CategorySearchBox";
 
 
 const ProductsList = () => {

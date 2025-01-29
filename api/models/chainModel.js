@@ -71,9 +71,9 @@ const chainSchema = new mongoose.Schema(
     }],
     prices: [{
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      // required: true,
       // unique: true,
-      sparse: true,
+      // sparse: true,
       ref: 'Price',
     }]
   },

@@ -45,12 +45,12 @@ const StorePricesList = () => {
   const createPriceHandler = async () => {
     if (window.confirm('האם אתה בטוח שאתה רוצה ליצור מחיר חדש?')) {
       try {
-        navigate(`/admin/price/create`)
+        navigate(`/admin/price/create`);
       } catch (err) {
         toast.error(err?.store?.message || err.error);
       }
     }
-  }
+  };
 
 
   return (
@@ -68,7 +68,7 @@ const StorePricesList = () => {
             store.chain ? <h1>מחירים ברשת {store.chain.name} סניף: {store.name}</h1> : <h1>מחירים {store.name}</h1>
           }
           {
-                store.image && <Image src={`/api/${store.image}`} rounded className="w-25 m-1" />
+            store.image && <Image src={`/api/${store.image}`} rounded className="w-25 m-1" />
           }
           <div className="d-flex justify-content-between">
             <SearchBox route={"/admin/prices"} />
@@ -81,9 +81,6 @@ const StorePricesList = () => {
               <tr>
                 <th>מוצר</th>
                 <th>חנות</th>
-                {
-                  store.chain ? <th>רשת</th> : null
-                }
 
                 <th>מחיר</th>
                 {
@@ -93,16 +90,10 @@ const StorePricesList = () => {
               </tr>
             </thead>
             <tbody>
-              {
-                console.log("22", store.prices[0])
-              }
               {store.prices && store.prices.length > 0 && store.prices.map((price) => (
                 <tr key={price._id}>
                   <td>{price.product.name}</td>
                   <td>{store.name}</td>
-                  {
-                    price.chain ? <td> {store.chain.name} </td> : null
-                  }
                   <td>{price.number}</td>
                   {
                     store.chain ? null : (

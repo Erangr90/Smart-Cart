@@ -33,7 +33,15 @@ const EditCategory = () => {
   const [search, setSearch] = useState('');
   const [keyword, setKeyword] = useState('');
   const [addProdId, setAddProdId] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(5);
   const navigate = useNavigate();
+
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
   // Api Slices
   const {
@@ -54,7 +62,7 @@ const EditCategory = () => {
     }
   }, [category]);
 
-  // Submit update form Handler
+  // Submit update Name
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -109,7 +117,7 @@ const EditCategory = () => {
       setSearchProducts(data.products);
     }
   }, [shouldFetch, data]);
-
+  // Filter products by keyword
   const submitHandler2 = (e) => {
     e.preventDefault();
     if (keyword.trim() !== "") {
@@ -124,6 +132,10 @@ const EditCategory = () => {
     } else {
       setProducts(category.products);
     }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -167,7 +179,7 @@ const EditCategory = () => {
                 מצא
               </Button>
             </InputGroup>
-            {products && products.length > 0 ? (
+            {/* {products && products.length > 0 ? (
               <Form.Group className='my-2' controlId='productsList'>
                 <Form.Label>רשימת מוצרים</Form.Label>
                 <Table striped bordered hover responsive className="table-sm">
@@ -204,6 +216,62 @@ const EditCategory = () => {
                     ))}
                   </tbody>
                 </Table>
+              </Form.Group>
+            ) : null} */}
+            {products && products.length > 0 ? (
+              <Form.Group className='my-2' controlId='productsList'>
+                <Form.Label>רשימת מוצרים</Form.Label>
+                <Table striped bordered hover responsive className="table-sm">
+                  <thead>
+                    <tr>
+                      <th>שם</th>
+                      <th>תיאור</th>
+                      <th>יצרן</th>
+                      <th>מדינה</th>
+                      <th>ברקוד</th>
+                      <th>כמות</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentProducts.map((product) => (
+                      <tr key={product._id}>
+                        <td>{product.name}</td>
+                        <td>{product.description}</td>
+                        <td>{product.manufacturer}</td>
+                        <td>{product.country + " " + product.country_code}</td>
+                        <td>{product.barcode}</td>
+                        <td>{product.measure + " " + product.unitOfMeasure}</td>
+                        <td>
+                          <Button
+                            variant="danger"
+                            className="btn-sm"
+                            onClick={() => deleteHandler(product._id)}
+                          >
+                            <FaTrash style={{ color: "white" }} />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <div className="pagination">
+                  <Button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="mx-3"
+                  >
+                    הקודם
+                  </Button>
+                  <span>{` עמוד ${currentPage} מתוך ${totalPages} `}</span>
+                  <Button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="mx-3"
+                  >
+                    הבא
+                  </Button>
+                </div>
               </Form.Group>
             ) : null}
           </Form>

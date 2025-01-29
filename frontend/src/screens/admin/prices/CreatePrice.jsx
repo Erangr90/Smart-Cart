@@ -23,7 +23,7 @@ const CreatePrice = () => {
   const [chainId, setChainId] = useState("");
   const [chainQuery, setChainQuery] = useState("");
 
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(0.0);
 
   const navigate = useNavigate();
 
@@ -66,12 +66,12 @@ const CreatePrice = () => {
     setProductId(obj._id);
     setProductQuery(
       obj.category.name +
-        " - " +
-        obj.name +
-        " - " +
-        obj.description +
-        " - " +
-        obj.barcode
+      " - " +
+      obj.name +
+      " - " +
+      obj.description +
+      " - " +
+      obj.barcode
     );
   };
   // Stores
@@ -87,8 +87,7 @@ const CreatePrice = () => {
     const obj = JSON.parse(e);
     setStoreId(obj._id);
     setStoreQuery(
-      `${obj.name} - ${obj.businessNumber} ${
-        obj.chain ? " - " + obj.chain.name : ""
+      `${obj.name} - ${obj.businessNumber} ${obj.chain ? " - " + obj.chain.name : ""
       }`
     );
   };
@@ -106,8 +105,7 @@ const CreatePrice = () => {
     const obj = JSON.parse(e);
     setChainId(obj._id);
     setChainQuery(
-      `${obj.name} - ${obj.businessNumber} ${
-        obj.stores ? "- " + obj.stores.length + "סניפים" : ""
+      `${obj.name} - ${obj.businessNumber} ${obj.stores ? "- " + obj.stores.length + "סניפים" : ""
       }`
     );
   };
@@ -128,8 +126,8 @@ const CreatePrice = () => {
         </Form.Group>
         <Form.Group className="my-2">
           {products &&
-          products.products.length > 0 &&
-          productQuery.length > 2 ? (
+            products.products.length > 0 &&
+            productQuery.length > 2 ? (
             <Form.Select
               onChange={(e) => selectProductHandler(e.target.value)}
               className="my-2"
@@ -169,9 +167,8 @@ const CreatePrice = () => {
                   <option defaultValue={""}>בחר חנות</option>
                   {stores.stores.map((x) => (
                     <option value={JSON.stringify(x)} key={x._id}>
-                      {`${x.name} - ${x.businessNumber} ${
-                        x.chain ? " - " + x.chain.name : ""
-                      }`}
+                      {`${x.name} - ${x.businessNumber} ${x.chain ? " - " + x.chain.name : ""
+                        }`}
                     </option>
                   ))}
                 </Form.Select>
@@ -199,9 +196,8 @@ const CreatePrice = () => {
                   <option defaultValue={""}>בחר רשת</option>
                   {chains.chains.map((x) => (
                     <option value={JSON.stringify(x)} key={x._id}>
-                      {`${x.name} - ${x.businessNumber} ${
-                        x.stores ? "- " + x.stores.length + "סניפים" : ""
-                      }`}
+                      {`${x.name} - ${x.businessNumber} ${x.stores ? "- " + x.stores.length + "סניפים" : ""
+                        }`}
                     </option>
                   ))}
                 </Form.Select>
