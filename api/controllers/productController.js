@@ -7,7 +7,7 @@ import isValidProduct from "../models/modelsValidation/ProductValidation.js";
 // @route   GET /products
 // @access  Admin
 const getProducts = asyncHandler(async (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   // PAGINATION
   const pageSize = process.env.PAGINATION_LIMIT;
   const page = Number(req.query.pageNumber) || 1;
@@ -78,7 +78,10 @@ const getProductById = asyncHandler(async (req, res) => {
     })
     .populate({
       path: 'prices',
-      select: '-product'
+      select: '-product',
+      populate: {
+        path: 'store chain'
+      }
     });
   if (!product) {
     res.status(404);

@@ -27,6 +27,7 @@ import PricesList from "./screens/admin/prices/PricesList";
 import EditPrice from "./screens/admin/prices/EditPrice";
 import ProductsList from "./screens/admin/products/ProductsList";
 import EditProduct from "./screens/admin/products/EditProduct";
+import ProductPricesList from "./screens/admin/products/ProductPricesList";
 import SubscriptionsList from "./screens/admin/subscriptions/SubscriptionsList";
 import EditSubscription from "./screens/admin/subscriptions/EditSubscription";
 import UnitsOfMeasureList from "./screens/admin/unitsOfMeasure/UnitsOfMeasureList";
@@ -123,11 +124,8 @@ const router = createBrowserRouter(
         {/* Products */}
         <Route path='/admin/products/page/:pageNumber' element={<ProductsList />} />
         <Route exact path='/admin/products/search/:keyword/page/:pageNumber' element={<ProductsList />} />
-        {/* <Route
-          path='/admin/products/search/:keyword/page/:pageNumber'
-          element={<ProductsList />}
-        /> */}
         <Route path='/admin/product/:id/edit' element={<EditProduct />} />
+        <Route path='/admin/product/:id/prices' element={<ProductPricesList />} />
         {/* Subscriptions */}
         <Route path='/admin/subscriptions' element={<SubscriptionsList />} />
         <Route path='/admin/subscription/:id/edit' element={<EditSubscription />} />

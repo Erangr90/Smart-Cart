@@ -211,6 +211,13 @@ const EditProduct = () => {
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group className="my-2" controlId="prices">
+              <Form.Label>מחירים</Form.Label>
+              <Link to={`/admin/product/${product._id}/prices`} className="mx-2">
+                רשימת מחירים
+              </Link>
+            </Form.Group>
+
 
 
             <Button type='submit' variant='primary'>
