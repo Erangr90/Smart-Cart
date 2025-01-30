@@ -7,7 +7,7 @@ import Cart from '../models/cartModel.js';
 // @route   GET /carts/
 // @access  Subscribe
 const getCartsByUser = asyncHandler(async (req, res) => {
-  let carts= null
+  let carts = null;
   // try {
   //   const keys = await redisClient.get(`carts:${req.user.id}:*`)
   //   if(keys && keys.length > 0){
@@ -21,14 +21,14 @@ const getCartsByUser = asyncHandler(async (req, res) => {
   // } catch (error) {
   //   console.error(error)
   // }
-  if(!carts){
-    carts = await Cart.find({user:req.user._id}).populate({
+  if (!carts) {
+    carts = await Cart.find({ user: req.user._id }).populate({
       path: 'user',
       select: '-orders -carts -password'
     })
-    .populate('orderItems.product')
+      .populate('orderItems.product');
   }
-  res.json(carts)
+  res.json(carts);
 });
 
 
@@ -56,9 +56,9 @@ const updateCart = asyncHandler(async (req, res) => {
     path: 'user',
     select: '-orders -carts -password'
   })
-  .populate('orderItems.product')
-  if(!cart){
-    throw new Error("No Cart found")
+    .populate('orderItems.product');
+  if (!cart) {
+    throw new Error("No Cart found");
   }
   for (let key in req.body) {
     if (req.body.hasOwnProperty(key)) {
@@ -67,7 +67,7 @@ const updateCart = asyncHandler(async (req, res) => {
     }
   }
   let updatedCart = await Cart.save();
-  updatedCart = await Cart.populate(updatedCart,{path:"orderItems.product"})
+  updatedCart = await Cart.populate(updatedCart, { path: "orderItems.product" });
   res.status(201).json(updatedCart);
 });
 
@@ -79,9 +79,9 @@ const getCartById = asyncHandler(async (req, res) => {
     path: 'user',
     select: '-orders -carts -password'
   })
-  .populate('orderItems.product')
-  if(!cart){
-    throw new Error("Cart not found")
+    .populate('orderItems.product');
+  if (!cart) {
+    throw new Error("Cart not found");
   }
   res.status(201).json(cart);
 });
@@ -99,10 +99,10 @@ const deleteCart = asyncHandler(async (req, res) => {
 
 
 
-  export {
-    createCart,
-    updateCart,
-    getCartById,
-    deleteCart,
-    getCartsByUser
-  };
+export {
+  createCart,
+  updateCart,
+  getCartById,
+  deleteCart,
+  getCartsByUser
+};

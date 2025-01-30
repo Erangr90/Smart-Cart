@@ -1,12 +1,12 @@
 // Regexs for validation
 const nameEnRegex = /^(?=.{1,50}$)[A-Z]{1}[a-z]{1,}(?:[A-Z]{1}[a-z]{1,}|[\" "\'\-\&\s][A-Z{1}[a-z]{1,}|[\'\-\&\s][a-z\1-9]{1,})*$/;
-const nameHeRegex = /^(?=.{1,50}$)[\u05D0-\u05EA]{1,}(?:[\" "\'\"\-\&\%][\u05D0-\u05EA\1-9]{1,})*$/;
+const nameHeRegex = /^(?=.{1,50}$)[\u05D0-\u05EA]{1,}(?:[\" "\'\"\-\&\%][\u05D0-\u05EA\1-9\'\"]{1,})*$/;
 const imageRegex = /^[\w\d\/\/\-\.\u05D0-\u05EA]{2,80}$/;
 const manufacturerEnRegex = /^(?=.{1,50}$)[A-Z]{1}[a-z]{1,}(?:[A-Z]{1}[a-z]{1,}|[\" "\'\-\&\s][A-Z]{1}[a-z]{1,}|[\'\-\&\s][a-z\1-9]{1,})*$/;
-const manufacturerHeRegex = /^(?=.{1,50}$)[\u05D0-\u05EA]{1,}(?:[\" "\'\"\-\&\%][\u05D0-\u05EA\1-9]{1,})*$/;
+const manufacturerHeRegex = /^(?=.{1,50}$)[\u05D0-\u05EA]{1,}(?:[\" "\'\"\-\&\%][\u05D0-\u05EA\1-9\'\"]{1,})*$/;
 const descriptionRegex = /^(?=.{1,255}$)[a-zA-Z\u05D0-\u05EA0-9\!\@\#\[\]\{\}\s\$\%\^\&\*\)\(\\\+\=\.\_\:\'\;\/\<\>\|\?\"\`\~\,\-]*$/;
 const barcodeRegex = /^\d{2,50}$/;
-const measureRegex = /^[0-9]{1,7}$/;
+const measureRegex = /^[0-9][.0-9]{1,7}$/;
 const country_codeRegex = /^[A-Z]{2,10}$/;
 
 const isValidProduct = (obj) => {

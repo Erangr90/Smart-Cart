@@ -12,7 +12,7 @@ const blackTokenSchema = new mongoose.Schema(
       expires: 0,
     },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 
