@@ -87,7 +87,7 @@ const router = createBrowserRouter(
           path='/admin/categories/search/:keyword/page/:pageNumber'
           element={<CategoriesList />}
         />
-        <Route path='/admin/category/:id/edit/page/:page' element={<EditCategory />} />
+        <Route path='/admin/category/:id/edit' element={<EditCategory />} />
         {/* Stores */}
         <Route path='/admin/stores' element={<StoresList />} />
         <Route path='/admin/stores/search/:keyword' element={<StoresList />} />

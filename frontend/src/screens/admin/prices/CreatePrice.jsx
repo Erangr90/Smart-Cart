@@ -23,7 +23,7 @@ const CreatePrice = () => {
   const [chainId, setChainId] = useState("");
   const [chainQuery, setChainQuery] = useState("");
 
-  const [number, setNumber] = useState(0.0);
+  const [number, setNumber] = useState(0.01);
 
   const navigate = useNavigate();
 
@@ -210,6 +210,7 @@ const CreatePrice = () => {
           <Form.Label>מחיר</Form.Label>
           <Form.Control
             type="number"
+            step="0.01"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
           ></Form.Control>

@@ -198,7 +198,7 @@ const getStoreById = asyncHandler(async (req, res) => {
       .populate({
         path: "prices",
         populate: {
-          path: "product",
+          path: "product store chain",
         },
       });
     // Not admin case for get less data 

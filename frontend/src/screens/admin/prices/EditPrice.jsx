@@ -45,10 +45,10 @@ const EditPrices = () => {
 
   useEffect(() => {
     if (price) {
-      setStore(price.store)
-      setChain(price.chain)
-      setNumber(price.number)
-      setProduct(price.product)
+      setStore(price.store);
+      setChain(price.chain);
+      setNumber(price.number);
+      setProduct(price.product);
     }
   }, [price]);
 
@@ -67,8 +67,8 @@ const EditPrices = () => {
             {error?.data?.message || error.error}
           </Message>
         ) : (<>
-        {console.log(price)}
-            <Table striped bordered hover responsive className="table-sm">
+          {console.log(price)}
+          <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
                 <th>קטגוריה</th>
@@ -81,17 +81,17 @@ const EditPrices = () => {
               </tr>
             </thead>
             <tbody>
-                <tr>
-                  <td>{price.product.category.name}</td>
-                  <td>
-                    {price.product.name}
-                  </td>
-                  <td>{price.product.description}</td>
-                  <td>{price.product.manufacturer}</td>
-                  <td>{price.product.country + " " + price.product.country_code}</td>
-                  <td>{price.product.barcode}</td>
-                  <td>{price.product.measure + " " + price.product.unitOfMeasure}</td>
-                </tr>
+              <tr>
+                <td>{price.product?.category?.name}</td>
+                <td>
+                  {price.product?.name}
+                </td>
+                <td>{price.product?.description}</td>
+                <td>{price.product?.manufacturer}</td>
+                <td>{price.product?.country + " " + price.product?.country_code}</td>
+                <td>{price.product?.barcode}</td>
+                <td>{price.product?.measure + " " + price.product?.unitOfMeasure}</td>
+              </tr>
             </tbody>
           </Table>
           <Form onSubmit={submitHandler}>

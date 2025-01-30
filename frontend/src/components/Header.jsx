@@ -74,7 +74,7 @@ const Header = () => {
             <LinkContainer to="/">
               <Navbar.Brand className="ms-auto">
                 <img src={logo} alt="העגלה שלי" />
-                העגלה שלי
+                עגלה חכמה
               </Navbar.Brand>
             </LinkContainer>
             <Nav className="me-auto">

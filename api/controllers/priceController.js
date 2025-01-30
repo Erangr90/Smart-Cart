@@ -2,6 +2,7 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import Price from '../models/priceModel.js';
 import Store from '../models/storeModel.js';
 import Chain from '../models/chainModel.js';
+import Product from "../models/productModel.js";
 
 
 
@@ -11,39 +12,85 @@ import Chain from '../models/chainModel.js';
 const getPrices = asyncHandler(async (req, res) => {
   // PAGINATION
   const pageSize = process.env.PAGINATION_LIMIT;
-  const page = Number(req.query.pageNumber) || 1;
+
   // Keyword to search
-  const query = req.query.keyword
-    ? {
-      $or: [
-        { store: req.query.keyword },
-        { chain: req.query.keyword },
-        { barcode: req.query.keyword },
+  const query = req.query.keyword ? {
+    $or: [
+      { 'store.name': { $regex: req.query.keyword, $options: 'i' } },
+      { 'chain.name': { $regex: req.query.keyword, $options: 'i' } },
+      { 'product.name': { $regex: req.query.keyword, $options: 'i' } },
+      { 'product.barcode': { $regex: req.query.keyword, $options: 'i' } },
+    ]
+  } : {};
 
-      ],
-    }
-    : {};
-  // Count number of elements
-  const count = await Price.countDocuments({ ...query });
-  // Find elements with pagination
-  const prices = await Price.find({ ...query })
-    .populate({
-      path: 'chain',
-      select: '-prices'
-    })
-    .populate({
-      path: 'store',
-      select: '-prices'
-    })
-    .populate({
-      path: 'product',
-      select: '-category -subCategory -prices'
-    })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1));
+  const prices = await Price.aggregate([
+    {
+      $lookup: {
+        from: 'stores', 
+        localField: 'store', 
+        foreignField: '_id',
+        as: 'store'
+      }
+    },
+    {
+      $lookup: {
+        from: 'chains', 
+        localField: 'chain', 
+        foreignField: '_id', 
+        as: 'chain'
+      }
+    },
+    {
+      $lookup: {
+        from: 'products', 
+        localField: 'product', 
+        foreignField: '_id',
+        as: 'product'
+      }
+    },
+    {
+      $unwind: {
+        path: '$store',
+        preserveNullAndEmptyArrays: true 
+      }
+    },
+    {
+      $unwind: {
+        path: '$chain',
+        preserveNullAndEmptyArrays: true 
+      }
+    },
+    {
+      $unwind: {
+        path: '$product',
+        preserveNullAndEmptyArrays: true 
+      }
+    },
+    {
+      $match: query
+    },
+  ]);
 
 
-  res.json({ prices, page, pages: Math.ceil(count / pageSize) });
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const skip = (page - 1) * limit;
+
+  // Apply pagination
+  const paginatedResults = prices.slice(skip, skip + limit);
+
+  // Count of total results for pagination purposes
+  const count = prices.length;
+
+  // Return the results
+  return res.json({
+    page,
+    pages: Math.ceil(count / limit),
+    prices: paginatedResults,
+  });
+
+
+  // res.json({ prices, page, pages: Math.ceil(count / pageSize) });
 });
 
 
@@ -97,6 +144,9 @@ const createPrice = asyncHandler(async (req, res) => {
         { $push: { 'prices': price._id } }
       );
     }
+    let product = await Product.findOne({ _id: req.body.productId });
+    product.prices = [...product.prices, newPrice];
+    await product.save();
     res.status(201).json(newPrice);
   } else {
     res.status(400);
@@ -118,26 +168,26 @@ const updatePrice = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
   }
   // Find the price
-  const price = await Price.findById(req.params.id)
-    .populate({
-      path: 'chain',
-      select: '-prices'
-    })
-    .populate({
-      path: 'store',
-      select: '-prices'
-    })
-    .populate({
-      path: 'product',
-      select: '-category -subCategory -prices'
-    });
+  const price = await Price.findById(req.params.id);
+  // .populate({
+  //   path: 'chain',
+  //   select: '-prices'
+  // })
+  // .populate({
+  //   path: 'store',
+  //   select: '-prices'
+  // })
+  // .populate({
+  //   path: 'product',
+  //   select: '-category -subCategory -prices'
+  // });
   if (!price) {
     res.status(404);
     throw new Error("No Price found");
   }
   // Update the price number
   price.number = req.body.number != undefined ? req.body.number : price.number;
-  // Save changes and populate
+  // Save changes
   let updatedPrice = await price.save();
   res.status(201).json(updatedPrice);
 });
@@ -162,7 +212,7 @@ const getPriceById = asyncHandler(async (req, res) => {
     })
     .populate({
       path: 'product',
-      select: '-category -subCategory -prices'
+      select: '-category -prices'
     });
   if (!price) {
     res.status(404);
@@ -199,8 +249,11 @@ const deletePrice = asyncHandler(async (req, res) => {
       { 'prices': price._id },
       { $pull: { 'prices': price._id } },
     );
-
   }
+  // Delete from product
+  const product = await Product.findOne({ _id: price.product });
+  product.prices = product.prices.filter((p) => p != req.params.id);
+  await product.save();
   res.json({ message: "Price removed" });
 });
 

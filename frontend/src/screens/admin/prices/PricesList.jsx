@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { Table, Button } from "react-bootstrap";
@@ -6,8 +6,8 @@ import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import {
-    useGetPricesQuery,
-    useDeletePriceMutation,
+  useGetPricesQuery,
+  useDeletePriceMutation,
 } from "../../../slices/pricesApiSlice";
 import { toast } from "react-toastify";
 import Paginate from "../../../components/Paginate";
@@ -40,15 +40,15 @@ const PricesList = () => {
   };
 
 
-  const createPriceHandler = async ()=>{
+  const createPriceHandler = async () => {
     if (window.confirm('האם אתה בטוח שאתה רוצה ליצור מחיר חדש?')) {
       try {
-        navigate(`/admin/price/create`)
+        navigate(`/admin/price/create`);
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
     }
-  }
+  };
 
 
   return (
@@ -63,9 +63,9 @@ const PricesList = () => {
       ) : (
         <>
           <div className="d-flex justify-content-between">
-            <SearchBox route={"/admin/prices"}/>
+            <SearchBox route={"/admin/prices"} />
             <Button type='button' variant='warning' className='my-3' onClick={createPriceHandler}>
-                צור מחיר חדש
+              צור מחיר חדש
             </Button>
           </div>
           <Table striped bordered hover responsive className="table-sm">
@@ -81,14 +81,14 @@ const PricesList = () => {
             <tbody>
               {data.prices && data.prices.length > 0 && data.prices.map((price) => (
                 <tr key={price._id}>
-                  <td>{price.product.name}</td>
+                  <td>{price.product.name + " - " + price.product.barcode}</td>
                   <td>{price.store ? price.store.name : ""}</td>
                   <td>
                     {
-                        price.chain ? price.chain.name : ""
+                      price.chain ? price.chain.name : ""
                     }
                   </td>
-                  <td>{price.number}</td> 
+                  <td>{price.number}</td>
                   <td>
                     <>
                       <LinkContainer
