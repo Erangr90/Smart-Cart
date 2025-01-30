@@ -69,10 +69,6 @@ const StorePricesList = () => {
     if (keyword.trim() !== "") {
       let temp = [];
       for (const price of prices) {
-        // console.log(price.store);
-        // console.log(price.chain);
-        // console.log(price.product);
-        console.log(price);
         if (price.product.name.includes(keyword) || price.product.barcode.includes(keyword)) {
           temp.push(price);
           continue;
@@ -135,7 +131,6 @@ const StorePricesList = () => {
                   type='text'
                   name='q'
                   onChange={handleKeywordChange}
-                  // onChange={(e) => setKeyword(e.target.value)}
                   value={keyword}
                   placeholder='חיפוש...'
                   className='mr-sm-2 ml-sm-5'
