@@ -13,6 +13,12 @@ import {
 import {
   useUploadImgMutation
 } from "../../../slices/filesApiSlice";
+import {
+  useGetAllCategoriesQuery
+} from "../../../slices/categoriesApiSlice";
+import {
+  useGetUnitsOfMeasureQuery
+} from "../../../slices/unitOfMeasureApiSlice";
 import isValidProduct from '../../../validations/ProductValidation';
 
 const EditProduct = () => {
@@ -27,6 +33,8 @@ const EditProduct = () => {
   const [country, setCountry] = useState('');
   const [country_code, setCountry_code] = useState('');
   const [image, setImage] = useState('');
+  const [dbCategories, setDbCategories] = useState([]);
+  const [dbUnits, setDbUnits] = useState([]);
 
 
   const {
@@ -35,6 +43,20 @@ const EditProduct = () => {
     error,
     refetch,
   } = useGetProductDetailsQuery(productId);
+
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+    refetch: categoryRefetch,
+  } = useGetAllCategoriesQuery();
+
+  const {
+    data: units,
+    isLoading: unitsLoading,
+    error: unitsError,
+    refetch: unitsRefetch,
+  } = useGetUnitsOfMeasureQuery();
 
   const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
   const [uploadImg, { isLoading: loadingUpload }] = useUploadImgMutation();
@@ -65,7 +87,7 @@ const EditProduct = () => {
     if (product) {
       setName(product.name);
       setManufacturer(product.manufacturer);
-      setCategory(product.category.name);
+      setCategory(product.category);
       setDescription(product.description);
       setBarcode(product.barcode);
       setUnitOfMeasure(product.unitOfMeasure);
@@ -75,6 +97,18 @@ const EditProduct = () => {
       setCountry_code(product.country_code);
     }
   }, [product]);
+
+  useEffect(() => {
+    if (categories) {
+      setDbCategories(categories);
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    if (units) {
+      setDbUnits(units);
+    }
+  }, [units]);
 
 
   const uploadFileHandler = async (e) => {
@@ -88,10 +122,10 @@ const EditProduct = () => {
       toast.error(err?.data?.message || err.error);
     }
   };
-
+  console.log(categories);
   return (
     <>
-      <Link to='/admin/products' className='btn btn-light my-3'>
+      <Link to='/admin/products/page/1' className='btn btn-light my-3'>
         רשימת מוצרים
       </Link>
       <FormContainer>
@@ -123,16 +157,33 @@ const EditProduct = () => {
                 type='file'
               ></Form.Control>
               {loadingUpload && <Loader />}
+            </Form.Group >
+
+            <Form.Group className='my-2' controlId='category' >
+              <Form.Label>קטגוריה</Form.Label>
+              {categoriesLoading ? <Loader /> : dbCategories ? (
+                <Form.Select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}>
+                  <option>בחר קטגוריה</option>
+                  {
+                    dbCategories && dbCategories.map((cat) => (
+                      <option key={cat._id} value={cat._id}>{cat?.name}</option>
+                    ))
+                  }
+                </Form.Select>
+              ) : null}
             </Form.Group>
 
-            <Form.Group className='my-2' controlId='category'>
+
+            {/* <Form.Group className='my-2' controlId='category'>
               <Form.Label>קטגוריה</Form.Label>
               <Form.Control
                 type='name'
                 value={category}
                 readOnly={true}
               ></Form.Control>
-            </Form.Group>
+            </Form.Group> */}
 
 
             <Form.Group className='my-2' controlId='name'>
@@ -168,7 +219,7 @@ const EditProduct = () => {
               <Form.Control
                 type='name'
                 value={country}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCountry(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
@@ -195,21 +246,37 @@ const EditProduct = () => {
             <Form.Group className='my-2' controlId='measure'>
               <Form.Label>כמות</Form.Label>
               <Form.Control
-                type='name'
+                type='number'
                 value={measure}
                 onChange={(e) => seMeasure(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group className='my-2' controlId='unitOfMeasure' >
+              <Form.Label>יחידת מידה</Form.Label>
+              {categoriesLoading ? <Loader /> : dbCategories ? (
+                <Form.Select
+                  value={unitOfMeasure}
+                  onChange={(e) => setUnitOfMeasure(e.target.value)}>
+                  <option>בחר יחידת מידה</option>
+                  {
+                    dbUnits && dbUnits.map((unit) => (
+                      <option key={unit._id} value={unit.name_he}>{unit?.name_he}</option>
+                    ))
+                  }
+                </Form.Select>
+              ) : null}
+            </Form.Group>
 
-            <Form.Group className='my-2' controlId='unitOfMeasure'>
+
+            {/* <Form.Group className='my-2' controlId='unitOfMeasure'>
               <Form.Label>יחידת מידה</Form.Label>
               <Form.Control
                 type='name'
                 value={unitOfMeasure}
                 onChange={(e) => setUnitOfMeasure(e.target.value)}
               ></Form.Control>
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group className="my-2" controlId="prices">
               <Form.Label>מחירים</Form.Label>

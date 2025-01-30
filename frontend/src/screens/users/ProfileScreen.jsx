@@ -8,8 +8,6 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useProfileMutation } from '../../slices/usersApiSlice';
-import { useGetMyOrdersQuery } from '../../slices/ordersApiSlice';
-import { useGetCartsQuery } from '../../slices/cartsSliceApi';
 import { setCredentials } from '../../slices/authSlice';
 import isValidUser from '../../validations/UserValidation';
 
@@ -23,31 +21,28 @@ const ProfileScreen = () => {
   const [subscription, setSubscription] = useState('ללא מנוי');
   const [clicks, setClicks] = useState(null);
 
-  const [isCartModalOpen, setCartModalOpen] = useState(false);
-  const [isOrderModalOpen, setOrderModalOpen] = useState(false);
 
 
   const { userInfo } = useSelector((state) => state.auth);
   const { subscriptions } = userInfo;
 
 
-
-  const { data: orders, isLoading: loadingOrders, error: ordersError } = useGetMyOrdersQuery();
-  const { data: carts, isLoading: loadingCarts, error: cartsError } = useGetCartsQuery();
-
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useProfileMutation();
 
   useEffect(() => {
-    setFirstName(userInfo.firstName);
-    setLastName(userInfo.lastName);
-    setEmail(userInfo.email);
-    if (subscriptions && subscriptions.length > 0) {
-      setSubscription(subscriptions[subscriptions.length - 1].name);
+    if (userInfo) {
+      setFirstName(userInfo.firstName);
+      setLastName(userInfo.lastName);
+      setEmail(userInfo.email);
+    }
+
+    if (subscriptions && subscriptions?.length > 0) {
+      setSubscription(subscriptions[subscriptions?.length - 1].name);
     } else {
       setClicks(userInfo.clicks);
     }
-  }, [userInfo.email, userInfo.name]);
+  }, [userInfo]);
 
   const dispatch = useDispatch();
   const submitHandler = async (e) => {
@@ -161,98 +156,6 @@ const ProfileScreen = () => {
           </Button>
           {loadingUpdateProfile && <Loader />}
         </Form>
-      </Col>
-      <Col md={3} className="mx-5">
-        <h2>העגלות שלי</h2>
-        {
-          carts.length > 0 ? (
-
-            cartsError ? <Message variant='danger'>{cartsError}</Message> :
-              (
-                loadingCarts ? <Loader /> :
-                  <Table striped bordered hover responsive className="table-sm">
-                    <thead>
-                      <tr>
-                        <th>תאריך</th>
-                        <th>חנות</th>
-                        <th>פריטים</th>
-                        <th>מחיר</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {carts.map((cart) => (
-                        <tr key={cart._id}>
-                          <td>{cart.createdAt}</td>
-                          <td>{cart.store}</td>
-                          <td>
-                            {
-                              isCartModalOpen ? (
-                                <>
-                                  <div className="modal-overlay">
-                                    <div className="modal">
-                                      <Button onClick={setCartModalOpen(false)}>סגירה</Button>
-                                      <h2>Modal Title</h2>
-                                      <p>Modal content...</p>
-                                    </div>
-                                  </div>
-                                </>
-                              ) : <Button onClick={setCartModalOpen(true)}>צפייה בפריטים</Button>
-                            }
-                          </td>
-                          <td>{cart.totalPrice}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-              )
-
-          ) : null
-        }
-
-      </Col>
-      <Col md={3} className="mx-5">
-        <h2>ההזמנות שלי</h2>
-        {
-          orders.length > 0 ? (
-            ordersError ? <Message>{ordersError}</Message> :
-              loadingOrders ? <Loader /> :
-                <Table striped bordered hover responsive className="table-sm">
-                  <thead>
-                    <tr>
-                      <th>תאריך</th>
-                      <th>חנות</th>
-                      <th>פריטים</th>
-                      <th>מחיר</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders.map((order) => (
-                      <tr key={order._id}>
-                        <td>{order.createdAt}</td>
-                        <td>{order.store}</td>
-                        <td>
-                          {
-                            isOrderModalOpen ? (
-                              <>
-                                <div className="modal-overlay">
-                                  <div className="modal">
-                                    <Button onClick={setOrderModalOpen(false)}>סגירה</Button>
-                                    <h2>Modal Title</h2>
-                                    <p>Modal content...</p>
-                                  </div>
-                                </div>
-                              </>
-                            ) : <Button onClick={setOrderModalOpen(true)}>צפייה בפריטים</Button>
-                          }
-                        </td>
-                        <td>{order.totalPrice}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-          ) : null
-        }
-
       </Col>
     </Row>
   );

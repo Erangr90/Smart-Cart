@@ -19,6 +19,13 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
       providesTags: ['Categories'],
     }),
+    getAllCategories: builder.query({
+      query: () => ({
+        url: `${CATEGORIES_URL}/all`,
+      }),
+      keepUnusedDataFor: 5,
+      providesTags: ['Categories'],
+    }),
     deleteCategory: builder.mutation({
       query: (categoryId) => ({
         url: `${CATEGORIES_URL}/${categoryId}`,
@@ -37,7 +44,7 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
       query: ({ categoryId, productId }) => ({
         url: `${CATEGORIES_URL}/${categoryId}/product`,
         method: 'DELETE',
-        body: {categoryId, productId}
+        body: { categoryId, productId }
       }),
     }),
 
@@ -61,6 +68,7 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
 export const {
   useCreateCategoryMutation,
   useGetCategoriesQuery,
+  useGetAllCategoriesQuery,
   useDeleteCategoryMutation,
   useDeleteProductFromCategoryMutation,
   useAddProductToCategoryMutation,

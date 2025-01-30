@@ -17,12 +17,7 @@ import HomeScreen from './screens/HomeScreen';
 // import CartScreen from './screens/CartScreen';
 import LoginScreen from './screens/users/LoginScreen';
 import RegisterScreen from './screens/users/RegisterScreen';
-// import ShippingScreen from './screens/ShippingScreen';
-// import PaymentScreen from './screens/PaymentScreen';
-// import PlaceOrderScreen from './screens/PlaceOrderScreen';
-// import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/users/ProfileScreen';
-import OrdersList from './screens/admin/orders/OrdersList';
 import PricesList from "./screens/admin/prices/PricesList";
 import EditPrice from "./screens/admin/prices/EditPrice";
 import ProductsList from "./screens/admin/products/ProductsList";
@@ -45,7 +40,6 @@ import StorePricesList from './screens/admin/stores/StorePricesList';
 import ChainPricesList from './screens/admin/chains/ChainPricesList';
 import store from './store';
 import { Provider } from 'react-redux';
-// import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -57,16 +51,11 @@ const router = createBrowserRouter(
         path='/search/:keyword/page/:pageNumber'
         element={<HomeScreen />}
       />
-      {/* <Route path='/product/:id' element={<ProductScreen />} /> */}
       {/* <Route path='/cart' element={<CartScreen />} /> */}
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
       {/* Registered users */}
       <Route path='' element={<PrivateRoute />}>
-        {/* <Route path='/shipping' element={<ShippingScreen />} /> */}
-        {/* <Route path='/payment' element={<PaymentScreen />} /> */}
-        {/* <Route path='/placeorder' element={<PlaceOrderScreen />} /> */}
-        {/* <Route path='/order/:id' element={<OrderScreen />} /> */}
         <Route path='/profile' element={<ProfileScreen />} />
       </Route>
       {/* Admin users */}
@@ -109,8 +98,6 @@ const router = createBrowserRouter(
         />
         <Route path='/admin/chain/:id/edit' element={<EditChain />} />
         <Route path='/admin/chain/:id/prices' element={<ChainPricesList />} />
-        {/* Orders */}
-        <Route path='/admin/orderslist' element={<OrdersList />} />
         {/* Prices */}
         <Route path='/admin/prices' element={<PricesList />} />
         <Route path='/admin/prices/search/:keyword' element={<PricesList />} />

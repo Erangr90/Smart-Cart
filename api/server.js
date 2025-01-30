@@ -12,7 +12,6 @@ import cartRouts from "./routes/cartRoutes.js";
 import storeRouts from "./routes/storeRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import subscriptionRoute from "./routes/subscriptionRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
 import unitOfMeasureRoutes from "./routes/unitOfMeasureRoutes.js";
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -49,18 +48,10 @@ app.use("/carts", cartRouts);
 app.use("/stores", storeRouts);
 app.use("/categories", categoryRoutes);
 app.use("/subscriptions", subscriptionRoute);
-app.use("/orders", orderRoutes);
 app.use("/unitsOfMeasure", unitOfMeasureRoutes);
 app.use('/uploads', uploadRoutes);
 
 
-// app.get('/api/config/paypal', (req, res) =>
-//   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
-// );
-
-// app.get("/", (req, res) => {
-//   res.send("API is running....");
-// });
 
 
 

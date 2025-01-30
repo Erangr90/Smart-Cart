@@ -4,7 +4,7 @@ import isValidCategory from '../models/modelsValidation/CategoryValidation.js';
 import Product from '../models/productModel.js';
 
 
-// @desc    Fetch all categories
+// @desc    Fetch all categories per Page
 // @route   GET /categories
 // @access  Subscribe
 const getCategories = asyncHandler(async (req, res) => {
@@ -37,6 +37,17 @@ const getCategories = asyncHandler(async (req, res) => {
 
 
   res.status(200).json({ categories, page, pages: Math.ceil(count / pageSize) });
+
+
+});
+
+// @desc    Fetch all categories per Page
+// @route   GET /categories
+// @access  Subscribe
+const getAllCategories = asyncHandler(async (req, res) => {
+
+  const categories = await Category.find();
+  res.status(200).json(categories);
 
 
 });
@@ -211,5 +222,6 @@ export {
   getCategoryById,
   deleteCategory,
   deleteProductFromCategory,
-  addProductToCategory
+  addProductToCategory,
+  getAllCategories
 };

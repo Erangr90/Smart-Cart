@@ -123,6 +123,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
   // Find the product
   const product = await Product.findById(req.params.id);
+  console.log(req.body);
   if (product) {
     if (isValidProduct(req.body)) {
       // Update the product's fields
@@ -138,12 +139,15 @@ const updateProduct = asyncHandler(async (req, res) => {
         }
         // Get the category by Id
         if (key == 'category') {
-          const category = await Category.findOne({ name: req.body[key] });
+          const category = await Category.findOne({ _id: req.body[key] });
           if (!category) {
             res.status(400);
             throw new Error(`Invalid ${key}`);
           }
           product[key] = category._id;
+          category.products = category.products.filter((id) => id != req.body.productId);
+          category.products = [...category.products, product._id];
+          await category.save();
         }
       }
 

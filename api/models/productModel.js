@@ -16,7 +16,7 @@ const productSchema = mongoose.Schema(
     // },
     name: {
       type: String,
-      // required: true,
+      required: true,
       // validate: {
       //   validator: function (v) {
       //     return !/^(?=.{1,50}$)[A-Z]{1}[a-z]{1,}(?:[A-Z]{1}[a-z]{1,}|[\'\-\&\s][A-Z]{1}[a-z]{1,}|[\'\-\&\s][a-z]{1,})*$/.test(v) ||
@@ -27,7 +27,7 @@ const productSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      // required: true,
+      required: true,
       // unique: true,
       // sparse: true,
       // validate: {
@@ -39,7 +39,7 @@ const productSchema = mongoose.Schema(
     },
     manufacturer: {
       type: String,
-      // required: true,
+      required: true,
       // validate: {
       //   validator: function(v) {
       //     return v.length >= 2 && v.length <= 25;
@@ -82,7 +82,7 @@ const productSchema = mongoose.Schema(
     barcode: {
       type: String,
       unique: true,
-      // required: true,
+      required: true,
       // validate: {
       //   validator: function (v) {
       //     return /^\d{2,50}$/.test(v);
@@ -101,15 +101,15 @@ const productSchema = mongoose.Schema(
     //   }
     // },
     unitOfMeasure: {
-      // type: mongoose.Schema.Types.ObjectId,
+      type: String,
       // ref: 'UnitOfMeasure',
       // required:true
       // type: String,
-      // required:true
+      required: true
     },
     measure: {
       type: Number,
-      // required: true,
+      required: true,
       // validate: {
       //   validator: function (v) {
       //     return /^[0-9]{1,7}$/.test(v);

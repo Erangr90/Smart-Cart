@@ -90,9 +90,9 @@ const ProductsList = () => {
             <tbody>
               {data.products.map((product) => (
                 <tr key={product._id}>
-                  <td>{product.category.name}</td>
+                  <td>{product.category?.name}</td>
                   <td>
-                    {product.name}
+                    {product?.name}
                   </td>
                   <td>{product.description}</td>
                   <td>{product.manufacturer}</td>

@@ -32,10 +32,6 @@ const Header = () => {
       route: "chains"
     },
     {
-      name: "הזמנות",
-      route: "orders"
-    },
-    {
       name: "מחירים",
       route: "prices"
     },

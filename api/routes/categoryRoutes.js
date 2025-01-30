@@ -7,7 +7,8 @@ import {
   getCategoryById,
   deleteCategory,
   deleteProductFromCategory,
-  addProductToCategory
+  addProductToCategory,
+  getAllCategories
 } from "../controllers/categoryController.js";
 import { subscribe, admin } from "../middleware/authMiddleware.js";
 
@@ -15,6 +16,9 @@ router
   .route("/")
   .get(getCategories)
   .post(subscribe, admin, createCategory);
+router
+  .route("/all")
+  .get(getAllCategories);
 router
   .route("/:id")
   .put(subscribe, admin, updateCategory)
