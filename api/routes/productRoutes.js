@@ -6,6 +6,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductTopPrices
   // getSaleProducts,
 } from '../controllers/productController.js';
 import { subscribe, admin } from '../middleware/authMiddleware.js';
@@ -16,6 +17,9 @@ router
   .get(subscribe, getProductById)
   .put(subscribe, admin, updateProduct)
   .delete(subscribe, admin, deleteProduct);
+router
+  .route('/:id/top_prices')
+  .get(getProductTopPrices);
 
 
 export default router;

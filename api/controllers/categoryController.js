@@ -21,7 +21,7 @@ const getCategories = asyncHandler(async (req, res) => {
   // Count number of elements
   const count = await Category.countDocuments({ ...keyword });
   // Find elements with pagination
-  const categories = await Category.find({ ...keyword })
+  let categories = await Category.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .populate({
@@ -32,6 +32,8 @@ const getCategories = asyncHandler(async (req, res) => {
         select: '-product',
       }
     });
+
+  categories = sortByName(categories);
 
 
 
@@ -46,7 +48,8 @@ const getCategories = asyncHandler(async (req, res) => {
 // @access  Subscribe
 const getAllCategories = asyncHandler(async (req, res) => {
 
-  const categories = await Category.find();
+  let categories = await Category.find();
+  categories = sortByName(categories);
   res.status(200).json(categories);
 
 
@@ -212,9 +215,6 @@ const addProductToCategory = asyncHandler(async (req, res) => {
 
 
 
-
-
-
 export {
   getCategories,
   createCategory,
@@ -225,3 +225,16 @@ export {
   addProductToCategory,
   getAllCategories
 };
+
+
+function sortByName(arr) {
+  return arr.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
+}

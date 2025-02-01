@@ -1,13 +1,13 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
 import Category from "../models/categoryModel.js";
+import Chain from "../models/chainModel.js";
 import isValidProduct from "../models/modelsValidation/ProductValidation.js";
 
 // @desc    Fetch products by query
 // @route   GET /products
 // @access  Admin
 const getProducts = asyncHandler(async (req, res) => {
-  console.log(req.query);
   // PAGINATION
   const pageSize = process.env.PAGINATION_LIMIT;
   const page = Number(req.query.pageNumber) || 1;
@@ -57,6 +57,8 @@ const getProducts = asyncHandler(async (req, res) => {
         path: 'prices',
         select: '-product'
       });
+
+    products = sortByCategory(products);
   }
   // console.log({ products, page, pages: Math.ceil(count / pageSize) });
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
@@ -71,7 +73,7 @@ const getProductById = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
-  const product = await Product.findById(req.params.id)
+  let product = await Product.findById(req.params.id)
     .populate({
       path: 'category',
       select: '-products',
@@ -83,12 +85,65 @@ const getProductById = asyncHandler(async (req, res) => {
         path: 'store chain'
       }
     });
+  product.prices = sortByPrice(product.prices);
   if (!product) {
     res.status(404);
     throw new Error("Product Not found");
   }
   return res.json(product);
 });
+
+// @desc    Fetch single product by chipest prices
+// @route   GET /products/:id/top_prices
+// @access  Subscribe
+const getProductTopPrices = asyncHandler(async (req, res) => {
+  // Request validation
+  if (!req.params || !req.params.id) {
+    res.status(400);
+    throw new Error("Invalid request");
+  }
+  let product = await Product.findById(req.params.id)
+    .populate({
+      path: 'category',
+      select: '-products',
+    })
+    .populate({
+      path: 'prices',
+      select: '-product',
+      populate: {
+        path: 'store chain',
+        select: '-prices',
+      },
+    });
+  if (!product._id) {
+    res.status(404);
+    throw new Error("Product Not found");
+  }
+  product.prices = sortByPrice(product.prices);
+  product.prices = [
+    product.prices[0],
+    product.prices[1],
+    product.prices[2],
+  ];
+
+  // Get store locations
+  for (let price of product.prices) {
+    if (price.chain) {
+      let temp = await Chain.findOne({ _id: price.chain._id }).populate({
+        path: 'stores',
+        select: '-prices',
+      });
+      price.chain.stores = temp.stores;
+    }
+  }
+
+
+
+
+  return res.json(product);
+});
+
+
 
 // @desc    Create a product
 // @route   POST /products
@@ -198,4 +253,66 @@ export {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductTopPrices
 };
+// --------------------------------------- Help Functions ------------------------------------
+function sortByCategory(arr) {
+  return arr.sort((a, b) => {
+    if (a.category.name < b.category.name) {
+      return -1;
+    }
+    if (a.category.name > b.category.name) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+function sortByPrice(arr) {
+  return arr.sort((a, b) => {
+    if (a.number < b.number) {
+      return -1;
+    }
+    if (a.number > b.number) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+function sortByDis(arr) {
+  return arr.sort((a, b) => {
+    if (a.dis < b.dis) {
+      return -1;
+    }
+    if (a.dis > b.dis) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+function distance(lat1, lat2, lon1, lon2) {
+
+  // The math module contains a function
+  // named toRadians which converts from
+  // degrees to radians.
+  lon1 = lon1 * Math.PI / 180;
+  lon2 = lon2 * Math.PI / 180;
+  lat1 = lat1 * Math.PI / 180;
+  lat2 = lat2 * Math.PI / 180;
+
+  // Haversine formula 
+  let dlon = lon2 - lon1;
+  let dlat = lat2 - lat1;
+  let a = Math.pow(Math.sin(dlat / 2), 2)
+    + Math.cos(lat1) * Math.cos(lat2)
+    * Math.pow(Math.sin(dlon / 2), 2);
+
+  let c = 2 * Math.asin(Math.sqrt(a));
+
+  let r = 6371;
+
+  // calculate the result
+  return (c * r);
+}

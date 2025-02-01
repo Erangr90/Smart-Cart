@@ -31,7 +31,7 @@ const StoresList = () => {
   }, [data]);
 
   useEffect(() => {
-    if ("geolocation" in navigator) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         setPosition({
           latitude: position.coords.latitude,
@@ -104,7 +104,7 @@ const StoresList = () => {
                   <td>{store.name}</td>
                   <td>{store.address.street + ", " + store.address.city}{store.address.postalCode ? ", " + store.address.postalCode : null}</td>
                   <td>
-                    {distance(31.2775636, store.location.latitude, 34.7982254, store.location.longitude).toFixed(2)} ק"מ
+                    {distance(position.latitude, store.location.latitude, position.longitude, store.location.longitude).toFixed(2)} ק"מ
                   </td>
                   <td>
                     <>

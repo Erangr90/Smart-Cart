@@ -25,8 +25,8 @@ function fileFilter(req, file, cb) {
     if (!file) {
       cb(new Error("File not found"), false);
     }
-    const filetypes = /jpe?g|png|webp/;
-    const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
+    const filetypes = /jpe?g|png|webp|avif/;
+    const mimetypes = /image\/jpe?g|image\/png|image\/webp|avif/;
 
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = mimetypes.test(file.mimetype);

@@ -12,7 +12,7 @@ const SearchBox = ({ route, pageNumber }) => {
     if (keyword) {
       navigate(`${route}/search/${keyword.trim()}/page/${pageNumber}`);
     } else {
-      navigate(`${route}`);
+      navigate(`${route}/page/1`);
     }
   };
 
