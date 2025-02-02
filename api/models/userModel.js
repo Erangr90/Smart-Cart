@@ -55,10 +55,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Subscription',
     }],
-    products: [{
+    cart: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
-    }],
+      ref: 'Cart',
+    },
     isSubtribe: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
   },

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Form, Button, Image, Card, ListGroup, Stack } from 'react-bootstrap';
 import Loader from './Loader';
 import Message from './Message';
+import { Link } from 'react-router-dom';
+
 
 import {
     useGetProductTopPricesQuery,
@@ -139,8 +141,11 @@ const Product = ({ productId }) => {
                     </ListGroup>
                     <Card.Body>
                         <Stack gap={2}>
-                            <Card.Link href="#">הצג מוצר</Card.Link>
-                            <Card.Link href="#">כל המחירים בעיר</Card.Link>
+                            <Link className='btn btn-light my-3' to={`/product/${productId}`}>
+                                הצג מוצר
+                            </Link>
+                            {/* <Card.Link href="#">הצג מוצר</Card.Link> */}
+                            {/* <Card.Link href="#">כל המחירים בעיר</Card.Link> */}
                         </Stack>
                     </Card.Body>
                 </Card>

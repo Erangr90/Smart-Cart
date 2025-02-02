@@ -6,7 +6,7 @@ import isValidChain from '../models/modelsValidation/ChainValidation.js';
 
 
 
-// @desc    Fetch Chain query
+// @desc    Fetch Chain query per page
 // @route   GET /chains/
 // @access  Subtribe
 const getChains = asyncHandler(async (req, res) => {
@@ -53,6 +53,7 @@ const getChains = asyncHandler(async (req, res) => {
   }
   res.json({ chains, page, pages: Math.ceil(count / pageSize) });
 });
+
 
 
 

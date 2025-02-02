@@ -32,17 +32,12 @@ const cartSchema = mongoose.Schema(
         },
       },
     ],
-    store: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Store",
-    },
     totalPrice: {
       type: Number,
       default: 0.0,
       validate: {
         validator: function (v) {
-          return /^\d{1,5}(\.\d{1,2})?$/.test(v);
+          return /^\d{1,7}(\.\d{1,2})?$/.test(v);
         },
         message: (props) => `${props.value} is not valid`,
       },

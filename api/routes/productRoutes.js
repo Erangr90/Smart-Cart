@@ -11,7 +11,7 @@ import {
 } from '../controllers/productController.js';
 import { subscribe, admin } from '../middleware/authMiddleware.js';
 
-router.route('/').get(subscribe, admin, getProducts).post(subscribe, admin, createProduct);
+router.route('/').get(subscribe, getProducts).post(subscribe, admin, createProduct);
 router
   .route('/:id')
   .get(subscribe, getProductById)

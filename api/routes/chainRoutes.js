@@ -8,13 +8,13 @@ import {
     deleteChain,
 } from "../controllers/chainController.js";
 import { subscribe, admin } from "../middleware/authMiddleware.js";
-import {getCacheById} from "../middleware/cacheMiddleware.js"
+// import {getCacheById} from "../middleware/cacheMiddleware.js"
 
 router.route("/").get(subscribe, getChains).post(subscribe, admin, createChain);
 router
   .route("/:id")
   .put(subscribe, admin, updateChain)
-  .get(subscribe,getCacheById, getChainById)
+  .get(subscribe, getChainById)
   .delete(subscribe, admin, deleteChain);
 
 export default router;

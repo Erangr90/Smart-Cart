@@ -38,6 +38,9 @@ import EditChain from "./screens/admin/chains/EditChain";
 import CreatePrice from "./screens/admin/prices/CreatePrice";
 import StorePricesList from './screens/admin/stores/StorePricesList';
 import ChainPricesList from './screens/admin/chains/ChainPricesList';
+import ProductDetails from "./screens/users/ProductDetails";
+import Cart from "./screens/users/Cart";
+import Calculation from './screens/users/Calculation';
 import store from './store';
 import { Provider } from 'react-redux';
 
@@ -113,12 +116,17 @@ const router = createBrowserRouter(
         <Route exact path='/admin/products/search/:keyword/page/:pageNumber' element={<ProductsList />} />
         <Route path='/admin/product/:id/edit' element={<EditProduct />} />
         <Route path='/admin/product/:id/prices' element={<ProductPricesList />} />
+        <Route path='/product/:id' element={<ProductDetails />} />
         {/* Subscriptions */}
         <Route path='/admin/subscriptions' element={<SubscriptionsList />} />
         <Route path='/admin/subscription/:id/edit' element={<EditSubscription />} />
         {/* Units Of Measure */}
         <Route path='/admin/unitsOfMeasure' element={<UnitsOfMeasureList />} />
         <Route path='/admin/unitOfMeasure/:id/edit' element={<EditUnitOfMeasure />} />
+        {/* Cart */}
+        <Route path='/cart' element={<Cart />} />
+        {/* Calculation */}
+        <Route path='/calculation/chain/:chain' element={<Cart />} />
       </Route>
     </Route>
   )
