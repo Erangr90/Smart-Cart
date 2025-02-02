@@ -283,8 +283,10 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
+  console.log(req.params.id);
+  console.log(req.body);
   // Find the user
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.body._id);
   if (user) {
     // Update user filed by admin
     user.clicks = req.body.clicks || user.clicks;
@@ -302,7 +304,9 @@ const updateUser = asyncHandler(async (req, res) => {
       subscriptions: updatedUser.subscriptions,
       isAdmin: updatedUser.isAdmin,
       isSubtribe: updatedUser.isSubtribe,
+      clicks: updatedUser.clicks
     });
+    console.log(updatedUser.clicks);
   } else {
     res.status(404);
     throw new Error("User not found");

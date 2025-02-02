@@ -46,12 +46,24 @@ const getChains = asyncHandler(async (req, res) => {
     // Not admin case to get less data
   } else {
     // Find elements with pagination
-    chains = await Chain.find({ ...keyword }).select("-prices").populate({ path: 'stores' }).select("-prices")
-      .limit(pageSize)
-      .skip(pageSize * (page - 1));
+    chains = await Chain.find({}).select("-prices");
 
   }
   res.json({ chains, page, pages: Math.ceil(count / pageSize) });
+});
+
+// @desc    Fetch All Chain
+// @route   GET /chains/all
+// @access  Subtribe
+const getAllChains = asyncHandler(async (req, res) => {
+
+
+
+  // Find elements with pagination
+  const chains = await Chain.find({}).select("-prices");
+
+
+  res.json(chains);
 });
 
 

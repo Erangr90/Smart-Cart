@@ -126,7 +126,7 @@ const router = createBrowserRouter(
         {/* Cart */}
         <Route path='/cart' element={<Cart />} />
         {/* Calculation */}
-        <Route path='/calculation/chain/:chain' element={<Cart />} />
+        <Route path='/calculation/chain/:chainId' element={<Calculation />} />
       </Route>
     </Route>
   )

@@ -8,7 +8,7 @@ import { logout } from "../slices/authSlice";
 import logo from "../assets/logo.png";
 
 const Header = () => {
-  // const { cartItems } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -73,6 +73,14 @@ const Header = () => {
                 עגלה חכמה
               </Navbar.Brand>
             </LinkContainer>
+            {cartItems && cartItems.length > 0 ? (
+              <LinkContainer to="/cart">
+                <Navbar.Brand className="ms-auto">
+                  {`העגלה שלך (${cartItems.length}) פריטים`}
+                </Navbar.Brand>
+              </LinkContainer>
+            ) : null}
+
             <Nav className="me-auto">
               {userInfo ? (
                 <>

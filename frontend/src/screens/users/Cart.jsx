@@ -14,6 +14,13 @@ import Message from '../../components/Message';
 import { addToCart, removeFromCart } from '../../slices/cartSlice';
 import { useState } from 'react';
 import { useGetChainsQuery } from "../../slices/chainsApiSlice";
+import { toast } from 'react-toastify';
+import {
+  useUpdateUserMutation,
+  useGetUserDetailsQuery
+
+} from "../../slices/usersApiSlice";
+import { setCredentials } from '../../slices/authSlice';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -21,10 +28,13 @@ const Cart = () => {
 
   const [chainsList, setChainsList] = useState([]);
   const [chainId, setChainId] = useState("");
-  const [chainQuery, setChainQuery] = useState("");
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+
 
 
   const addToCartHandler = (product, qty) => {
@@ -34,9 +44,41 @@ const Cart = () => {
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
-
-  const checkoutHandler = () => {
-    navigate(`/login?redirect=/calculation/chain/${chainId}`);
+  console.log(userInfo.clicks);
+  const userDate = new Date(userInfo.clicks.date);
+  const today = new Date();
+  const yearsDiffPerMonth = Math.abs(today.getFullYear() - userDate.getFullYear()) * 12;
+  const MonthDiff = Math.abs((today.getMonth() + 1) - (userDate.getMonth() + 1));
+  const totalDiff = Math.floor(yearsDiffPerMonth + MonthDiff);
+  const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
+  const checkoutHandler = async () => {
+    if (chainId != "") {
+      // Add num of operations to the user
+      // check 10 clicks per month
+      if (userInfo.clicks.numOfClicks > 10 && totalDiff <= 1) {
+        toast.error("עברת את המכסה החודשית שלך");
+      } else {
+        //update date and clicks
+        const clicks = {
+          date: new Date(),
+          numOfClicks: userInfo.clicks.numOfClicks + 1
+        };
+        try {
+          const res = await updateUser({ ...userInfo, clicks }).unwrap();
+          dispatch(setCredentials({ ...res }));
+          // toast.success('user updated successfully');
+          // refetch();
+          // navigate('/admin/userlist');
+        } catch (err) {
+          toast.error(err?.data?.message || err.error);
+        }
+      }
+      // Send chainId and Items to the backend cluc
+      navigate(`/login?redirect=/calculation/chain/${chainId}`);
+    } else {
+      toast.error("נא לבחור רשת");
+      navigate(`/cart`);
+    }
   };
 
   // Chain
@@ -45,18 +87,8 @@ const Cart = () => {
     refetch: refetchChains,
     error: errorChains,
   } = useGetChainsQuery({
-    keyword: chainQuery,
+    keyword: "",
   });
-
-  const selectChainHandler = (e) => {
-    const obj = JSON.parse(e);
-    setChainId(obj._id);
-    setChainQuery(
-      `${obj.name}`
-    );
-  };
-
-  console.log(cartItems);
 
   return (
     <Row>
@@ -109,32 +141,20 @@ const Cart = () => {
         )}
       </Col>
       <Col md={2}>
-
-        {/* Chains */}
-
         <>
-          <Form.Group className="my-2" controlId="chainQuery">
-            <Form.Label>רשת</Form.Label>
-            <Form.Control
-              type="name"
-              value={chainQuery}
-              onChange={(e) => setChainQuery(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
           <Form.Group className="my-2">
-            {chains && chains.chains.length > 0 && chainQuery.length > 1 ? (
-              <Form.Select
-                onChange={(e) => selectChainHandler(e.target.value)}
-                className="my-2"
-              >
-                <option defaultValue={""}>בחר רשת</option>
-                {chains.chains.map((x) => (
-                  <option value={JSON.stringify(x)} key={x._id}>
-                    {`${x.name}`}
-                  </option>
-                ))}
-              </Form.Select>
-            ) : null}
+            <Form.Select
+              onChange={(e) => setChainId(e.target.value)}
+              className="my-2"
+              value={chainId}
+            >
+              <option defaultValue={""}>בחר רשת</option>
+              {chains?.chains.map((x) => (
+                <option value={x._id} key={x._id}>
+                  {`${x.name}`}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
           <Form.Group>
             <Button
