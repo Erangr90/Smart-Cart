@@ -12,15 +12,15 @@ import {
 import { FaTrash } from 'react-icons/fa';
 import Message from '../../components/Message';
 import { addToCart, removeFromCart } from '../../slices/cartSlice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGetChainsQuery } from "../../slices/chainsApiSlice";
 import { toast } from 'react-toastify';
 import {
   useUpdateUserMutation,
-  useGetUserDetailsQuery
 
 } from "../../slices/usersApiSlice";
 import { setCredentials } from '../../slices/authSlice';
+import { useCartCalculationMutation } from "../../slices/cartsApiSlice";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -28,11 +28,27 @@ const Cart = () => {
 
   const [chainsList, setChainsList] = useState([]);
   const [chainId, setChainId] = useState("");
+  const [sum, setSum] = useState(0);
+  const [store, setStore] = useState({});
+  const [position, setPosition] = useState({ latitude: null, longitude: null });
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        setPosition({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      });
+    } else {
+      console.log("Geolocation is not available in your browser.");
+    }
+  }, []);
 
 
 
@@ -44,37 +60,54 @@ const Cart = () => {
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
-  console.log(userInfo.clicks);
+
   const userDate = new Date(userInfo.clicks.date);
   const today = new Date();
   const yearsDiffPerMonth = Math.abs(today.getFullYear() - userDate.getFullYear()) * 12;
   const MonthDiff = Math.abs((today.getMonth() + 1) - (userDate.getMonth() + 1));
   const totalDiff = Math.floor(yearsDiffPerMonth + MonthDiff);
   const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
+  const [calcCart, { isLoading: loading }] = useCartCalculationMutation();
+
   const checkoutHandler = async () => {
     if (chainId != "") {
       // Add num of operations to the user
       // check 10 clicks per month
-      if (userInfo.clicks.numOfClicks > 10 && totalDiff <= 1) {
+      if (userInfo.clicks.numOfClicks >= 20 && totalDiff == 0) {
         toast.error("עברת את המכסה החודשית שלך");
-      } else {
+      } else if (userInfo.clicks.numOfClicks >= 20 && totalDiff > 0) {
         //update date and clicks
         const clicks = {
           date: new Date(),
+          numOfClicks: 1
+        };
+        try {
+          const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
+          dispatch(setCredentials({ ...res1 }));
+          const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+          setSum(res2.sum);
+          setStore(res2.store);
+        } catch (err) {
+          toast.error(err?.data?.message || err.error);
+        }
+      } else if (userInfo.clicks.numOfClicks < 20 && totalDiff == 0) {
+        const clicks = {
+          date: userInfo.clicks.date,
           numOfClicks: userInfo.clicks.numOfClicks + 1
         };
         try {
-          const res = await updateUser({ ...userInfo, clicks }).unwrap();
-          dispatch(setCredentials({ ...res }));
-          // toast.success('user updated successfully');
-          // refetch();
-          // navigate('/admin/userlist');
+          const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
+          dispatch(setCredentials({ ...res1 }));
+          const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+          setSum(res2.sum);
+          setStore(res2.store);
         } catch (err) {
           toast.error(err?.data?.message || err.error);
         }
       }
-      // Send chainId and Items to the backend cluc
-      navigate(`/login?redirect=/calculation/chain/${chainId}`);
+
+
+      // navigate(`/login?redirect=/calculation/chain/${chainId}`);
     } else {
       toast.error("נא לבחור רשת");
       navigate(`/cart`);
@@ -147,6 +180,7 @@ const Cart = () => {
               onChange={(e) => setChainId(e.target.value)}
               className="my-2"
               value={chainId}
+              disabled={cartItems.length == 0}
             >
               <option defaultValue={""}>בחר רשת</option>
               {chains?.chains.map((x) => (
@@ -166,28 +200,30 @@ const Cart = () => {
               חישוב העגלה
             </Button>
           </Form.Group>
+          {sum > 0 && cartItems.length > 0 &&
+            <Card className="my-4">
+              <ListGroup variant='flush'>
+                <ListGroup.Item>
+                  <h2>
+                    ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                    פריטים
+                  </h2>
+                  {Number(sum).toFixed(2)}{" "}
+                  {`ש"ח`}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  {store.name}{" - "}{Number(store.dis).toFixed(2)}{" "}{`ק"מ`}
+                </ListGroup.Item>
+              </ListGroup>
+            </Card>
+          }
+
         </>
 
 
       </Col>
       {/* <Col md={2} className='my-4'>
-        <Card>
-        <ListGroup variant='flush'>
-        <ListGroup.Item>
-              <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
-              </h2>
-              $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
-            </ListGroup.Item>
-        <ListGroup.Item>
 
-        </ListGroup.Item>
-        </ListGroup>
-        </Card>
       </Col> */}
     </Row>
   );

@@ -46,7 +46,7 @@ const getChains = asyncHandler(async (req, res) => {
     // Not admin case to get less data
   } else {
     // Find elements with pagination
-    chains = await Chain.find({}).select("-prices");
+    chains = await Chain.find({}).select("-prices -stores");
 
   }
   res.json({ chains, page, pages: Math.ceil(count / pageSize) });

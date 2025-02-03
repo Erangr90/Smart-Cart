@@ -1,5 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Cart from '../models/cartModel.js';
+import Chain from "../models/chainModel.js";
+import distance from "../utils/distance.js";
 // import redisClient from "../config/redis.js";
 
 
@@ -94,6 +96,47 @@ const deleteCart = asyncHandler(async (req, res) => {
   res.json({ message: "Cart removed" });
 });
 
+// @desc    calc cart
+// @route   PUT /calc
+// @access  Open
+const CartCalc = asyncHandler(async (req, res) => {
+  const chain = await Chain.findOne({ _id: req.body.chainId })
+    .populate({
+      path: 'prices',
+    })
+    .populate({
+      path: 'stores',
+      select: "-prices"
+    });
+  console.log(req.body.position);
+  let sum = 0;
+  const items = req.body.cartItems;
+
+  for (const price of chain.prices) {
+    for (const item of items) {
+      if (price.product == item._id) {
+        sum += (item.qty * price.number).toFixed(2);
+      }
+    }
+  }
+
+  let arr = [...chain.stores];
+
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = {
+      ...arr[i]._doc,
+      dis: distance(req.body.position.latitude, arr[i].location.latitude, req.body.position.longitude, arr[i].location.longitude)
+    };
+  }
+
+  arr = sortByDis(arr);
+  console.log(arr[0]);
+  res.json({ sum, store: arr[0] });
+
+});
+
+
+
 
 
 
@@ -104,5 +147,18 @@ export {
   updateCart,
   getCartById,
   deleteCart,
-  getCartsByUser
+  getCartsByUser,
+  CartCalc
 };
+
+function sortByDis(arr) {
+  return arr.sort((a, b) => {
+    if (a.dis < b.dis) {
+      return -1;
+    }
+    if (a.dis > b.dis) {
+      return 1;
+    }
+    return 0;
+  });
+}
