@@ -14,7 +14,6 @@ const imageRegex = /^[\w\d\/\/\-\.\u05D0-\u05EA]{2,80}$/;
 
 
 const isValidStore = (obj) => {
-    console.log(obj);
     const errors = [];
     if (!nameEnRegex.test(obj.name) && !nameHeRegex.test(obj.name)) { errors.push(`שם אינו תקין `); }
     // if (!businessNumberRegex.test(obj.businessNumber)) { errors.push(`מספר עסק אינו תקין`); }

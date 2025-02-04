@@ -7,7 +7,7 @@ const getCord = asyncHandler(async (id) => {
 
     const store = await Store.findOne({ _id: id });
 
-    // console.log(store);
+    
 
     const name = store.address.postalCode == undefined ? ((store.address.city).includes(" ") ? (store.address.city).replace(" ", "%20") : store.address.city) : "''";
     const housenumber = (store.address.street).match(/\d+/) ? (store.address.street).match(/\d+/)[0] : "''";
@@ -27,7 +27,7 @@ const getCord = asyncHandler(async (id) => {
     store.location.longitude = data.results[1]["lon"];
     store.location.latitude = data.results[1]["lat"];
 
-    console.log(store);
+    
 
     await store.save();
 

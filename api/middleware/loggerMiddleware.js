@@ -151,7 +151,6 @@ const logger = morgan((tokens, req, res) => {
       debugLogStream.write(message + "\n");
       break;
   }
-  // console.log(message)
   combinedLogStream.write(message + "\n");
   requestLogStream.write(message + "\n");
 });

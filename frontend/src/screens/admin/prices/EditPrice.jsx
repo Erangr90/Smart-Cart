@@ -67,7 +67,7 @@ const EditPrices = () => {
             {error?.data?.message || error.error}
           </Message>
         ) : (<>
-          {console.log(price)}
+
           <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>

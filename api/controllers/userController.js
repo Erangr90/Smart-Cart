@@ -265,7 +265,6 @@ const getUserById = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
-  console.log("sssss", req.params);
   // Find the user
   const user = await User.findById(req.params.id).select("-password");
   if (user) {
@@ -284,8 +283,6 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
-  console.log(req.params.id);
-  console.log(req.body);
   // Find the user
   const user = await User.findById(req.body._id);
   if (user) {

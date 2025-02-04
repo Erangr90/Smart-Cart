@@ -122,7 +122,6 @@ const EditProduct = () => {
       toast.error(err?.data?.message || err.error);
     }
   };
-  console.log(categories);
   return (
     <>
       <Link to='/admin/products/page/1' className='btn btn-light my-3'>

@@ -121,7 +121,7 @@ const EditCategory = () => {
   const submitHandler2 = (e) => {
     e.preventDefault();
     if (keyword.trim() !== "") {
-      console.log(keyword);
+      
       let temp = [];
       for (const prod of products) {
         if (prod.name.includes(keyword) || prod.manufacturer.includes(keyword) || prod.barcode.includes(keyword) || prod.description.includes(keyword)) {

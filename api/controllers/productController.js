@@ -60,7 +60,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
     products = sortByCategory(products);
   }
-  // console.log({ products, page, pages: Math.ceil(count / pageSize) });
+  
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
@@ -178,7 +178,6 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
   // Find the product
   const product = await Product.findById(req.params.id);
-  console.log(req.body);
   if (product) {
     if (isValidProduct(req.body)) {
       // Update the product's fields

@@ -94,7 +94,6 @@ const CartCalc = asyncHandler(async (req, res) => {
       path: 'stores',
       select: "-prices"
     });
-  console.log(req.body.position);
   let sum = 0;
   const items = req.body.cartItems;
 
@@ -116,7 +115,6 @@ const CartCalc = asyncHandler(async (req, res) => {
   }
 
   arr = sortByDis(arr);
-  console.log(arr[0]);
   res.json({ sum, store: arr[0] });
 
 });

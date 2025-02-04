@@ -79,27 +79,8 @@ const updateCategory = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
 
   }
-  console.log(req.params.id);
   // Find the Category
   const category = await Category.findById(req.params.id);
-  // .populate({
-  //   populate: {
-  //     path: 'products',
-  //     select: '-category',
-  //     populate: {
-  //       path: 'prices',
-  //       select: '-product',
-  //     },
-  //   },
-  // })
-  // .populate({
-  //   path: 'products',
-  //   select: '-category',
-  //   populate: {
-  //     path: 'prices',
-  //     select: '-product',
-  //   }
-  // });
   if (!category) {
 
     res.status(404);
@@ -182,20 +163,10 @@ const deleteProductFromCategory = asyncHandler(async (req, res) => {
 });
 
 const addProductToCategory = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const category = await Category.findOne(req.query.categoryId);
   let products = [...category.products];
   let include = false;
 
-
-  // products.map((prod) => {
-  //   console.log(prod);
-  //   console.log(prod == req.body.productId);
-  // });
-
-  // for (const prod of products) {
-  //   console.log(prod == req.body.productId);
-  // }
 
   for (const prod of products) {
     if (prod == req.body.productId) {

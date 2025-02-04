@@ -107,7 +107,7 @@ const Product = ({ productId }) => {
             }
         }
         setStores(arr);
-        // console.log(arr);
+        
 
     };
 
@@ -126,7 +126,7 @@ const Product = ({ productId }) => {
                 </Message>
             ) : (
                 <Card style={{ width: '12rem' }}>
-                    {console.log(stores)}
+                    
                     <Card.Img variant="top" src={`/api/${image}`} />
                     <Card.Body>
                         <Card.Title>{name}</Card.Title>

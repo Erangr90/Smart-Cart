@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/styles/index.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
@@ -52,7 +51,6 @@ const router = createBrowserRouter(
         path='/search/:keyword/page/:pageNumber'
         element={<HomeScreen />}
       />
-      {/* <Route path='/cart' element={<CartScreen />} /> */}
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
       {/* Registered users */}
@@ -133,9 +131,7 @@ root.render(
   <React.StrictMode>
     <HelmetProvider>
       <Provider store={store}>
-        {/* <PayPalScriptProvider deferLoading={true}> */}
         <RouterProvider router={router} />
-        {/* </PayPalScriptProvider> */}
       </Provider>
     </HelmetProvider>
   </React.StrictMode>
