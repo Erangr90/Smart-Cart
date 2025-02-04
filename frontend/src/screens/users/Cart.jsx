@@ -19,7 +19,7 @@ import {
   useUpdateUserMutation,
 
 } from "../../slices/usersApiSlice";
-import { setCredentials } from '../../slices/authSlice';
+import { updateUserInfo } from "../../slices/userSlice";
 import { useCartCalculationMutation } from "../../slices/cartsApiSlice";
 
 const Cart = () => {
@@ -61,53 +61,63 @@ const Cart = () => {
     dispatch(removeFromCart(id));
   };
 
-  const userDate = new Date(userInfo.clicks.date);
-  const today = new Date();
-  const yearsDiffPerMonth = Math.abs(today.getFullYear() - userDate.getFullYear()) * 12;
-  const MonthDiff = Math.abs((today.getMonth() + 1) - (userDate.getMonth() + 1));
-  const totalDiff = Math.floor(yearsDiffPerMonth + MonthDiff);
+
   const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
   const [calcCart, { isLoading: loading }] = useCartCalculationMutation();
 
   const checkoutHandler = async () => {
     if (chainId != "") {
-      // Add num of operations to the user
-      // check 10 clicks per month
-      if (userInfo.clicks.numOfClicks >= 20 && totalDiff == 0) {
-        toast.error("עברת את המכסה החודשית שלך");
-      } else if (userInfo.clicks.numOfClicks >= 20 && totalDiff > 0) {
-        //update date and clicks
-        const clicks = {
-          date: new Date(),
-          numOfClicks: 1
-        };
+      // Check subscription
+      if (!userInfo.subscription) {
+        // Check time and limit number of clicks
+        const userDate = new Date(userInfo.clicks.date);
+        const today = new Date();
+        const yearsDiffPerMonth = Math.abs(today.getFullYear() - userDate.getFullYear()) * 12;
+        const MonthDiff = Math.abs((today.getMonth() + 1) - (userDate.getMonth() + 1));
+        const totalDiff = Math.floor(yearsDiffPerMonth + MonthDiff);
+
+        if (userInfo.clicks.numOfClicks >= 40 && totalDiff == 0) {
+          toast.error("עברת את המכסה החודשית שלך");
+        } else if (userInfo.clicks.numOfClicks >= 40 && totalDiff > 0) {
+          const clicks = {
+            date: new Date(),
+            numOfClicks: 1
+          };
+          try {
+            const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
+            dispatch(updateUserInfo({ ...res1 }));
+            const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+            setSum(res2.sum);
+            setStore(res2.store);
+          } catch (err) {
+            toast.error(err?.data?.message || err.error);
+          }
+        } else if (userInfo.clicks.numOfClicks < 40 && totalDiff == 0) {
+          const clicks = {
+            date: userInfo.clicks.date,
+            numOfClicks: userInfo.clicks.numOfClicks + 1
+          };
+          try {
+            const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
+            dispatch(updateUserInfo({ ...res1 }));
+            const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+            setSum(res2.sum);
+            setStore(res2.store);
+          } catch (err) {
+            toast.error(err?.data?.message || err.error);
+          }
+        }
+
+      } else {
         try {
-          const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
-          dispatch(setCredentials({ ...res1 }));
           const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
           setSum(res2.sum);
           setStore(res2.store);
         } catch (err) {
           toast.error(err?.data?.message || err.error);
         }
-      } else if (userInfo.clicks.numOfClicks < 20 && totalDiff == 0) {
-        const clicks = {
-          date: userInfo.clicks.date,
-          numOfClicks: userInfo.clicks.numOfClicks + 1
-        };
-        try {
-          const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
-          dispatch(setCredentials({ ...res1 }));
-          const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
-          setSum(res2.sum);
-          setStore(res2.store);
-        } catch (err) {
-          toast.error(err?.data?.message || err.error);
-        }
+
       }
-
-
-      // navigate(`/login?redirect=/calculation/chain/${chainId}`);
     } else {
       toast.error("נא לבחור רשת");
       navigate(`/cart`);
@@ -142,7 +152,6 @@ const Cart = () => {
                   <Col md={2}>
                     <Link to={`/product/${item._id}`}>{item.name}</Link>
                   </Col>
-                  {/* <Col md={2}>${item.price}</Col> */}
                   <Col md={2}>
                     <Form.Control
                       as='select'
@@ -173,7 +182,7 @@ const Cart = () => {
           </ListGroup>
         )}
       </Col>
-      <Col md={2}>
+      <Col md={3}>
         <>
           <Form.Group className="my-2">
             <Form.Select
@@ -215,6 +224,15 @@ const Cart = () => {
                   {store.name}{" - "}{Number(store.dis).toFixed(2)}{" "}{`ק"מ`}
                 </ListGroup.Item>
               </ListGroup>
+              <Button
+                type='button'
+                variant='light'
+                className='btn-block'
+                disabled={cartItems.length === 0}
+              // onClick={checkoutHandler}
+              >
+                שמור עגלת פריטים
+              </Button>
             </Card>
           }
 

@@ -11,7 +11,6 @@ import {
   updateUser,
 } from "../controllers/userController.js";
 import { subscribe, admin } from "../middleware/authMiddleware.js";
-import {getCacheById} from "../middleware/cacheMiddleware.js"
 
 const router = express.Router();
 router.route("/").post(registerUser).get(subscribe, admin, getUsers);
@@ -24,7 +23,7 @@ router
 router
   .route("/:id")
   .delete(subscribe, admin, deleteUser)
-  .get(subscribe, admin,getCacheById, getUserById)
+  .get(subscribe, admin, getUserById)
   .put(subscribe, admin, updateUser);
 
 export default router;

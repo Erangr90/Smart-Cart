@@ -8,13 +8,12 @@ import {
     deleteUnitsOfMeasure
 } from "../controllers/unitOfMeasureController.js";
 import { subscribe, admin } from "../middleware/authMiddleware.js";
-import {getCacheById, getCacheByRoute} from "../middleware/cacheMiddleware.js"
 
-router.route("/").get(subscribe, admin, getCacheByRoute, getUnitsOfMeasure).post(subscribe, admin, createUnitOfMeasure);
+router.route("/").get(subscribe, admin, getUnitsOfMeasure).post(subscribe, admin, createUnitOfMeasure);
 router
   .route("/:id")
   .put(subscribe, admin, updateUnitOfMeasure)
-  .get(subscribe,getCacheById, getUnitOfMeasureById)
+  .get(subscribe, getUnitOfMeasureById)
   .delete(subscribe, admin, deleteUnitsOfMeasure);
 
 export default router;

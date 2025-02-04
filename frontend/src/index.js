@@ -14,7 +14,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
 import HomeScreen from './screens/HomeScreen';
-// import CartScreen from './screens/CartScreen';
 import LoginScreen from './screens/users/LoginScreen';
 import RegisterScreen from './screens/users/RegisterScreen';
 import ProfileScreen from './screens/users/ProfileScreen';
@@ -40,7 +39,6 @@ import StorePricesList from './screens/admin/stores/StorePricesList';
 import ChainPricesList from './screens/admin/chains/ChainPricesList';
 import ProductDetails from "./screens/users/ProductDetails";
 import Cart from "./screens/users/Cart";
-import Calculation from './screens/users/Calculation';
 import store from './store';
 import { Provider } from 'react-redux';
 
@@ -125,8 +123,6 @@ const router = createBrowserRouter(
         <Route path='/admin/unitOfMeasure/:id/edit' element={<EditUnitOfMeasure />} />
         {/* Cart */}
         <Route path='/cart' element={<Cart />} />
-        {/* Calculation */}
-        <Route path='/calculation/chain/:chainId' element={<Calculation />} />
       </Route>
     </Route>
   )

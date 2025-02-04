@@ -22,7 +22,6 @@
     "mongoose": "*",
     "multer": "*",
     "fs": "*",
-    "ioredis": "*",
     "morgan": "*",
     "rotating-file-stream": "*",
     "dotenv": "*",

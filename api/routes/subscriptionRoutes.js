@@ -8,13 +8,12 @@ import {
     deleteSubscription
 } from "../controllers/subscriptionController.js";
 import { subscribe, admin } from "../middleware/authMiddleware.js";
-import {getCacheById, getCacheByRoute} from "../middleware/cacheMiddleware.js"
 
-router.route("/").get(subscribe,getCacheByRoute, getSubscriptions).post(subscribe, admin, createSubscription);
+router.route("/").get(subscribe, getSubscriptions).post(subscribe, admin, createSubscription);
 router
   .route("/:id")
   .put(subscribe, admin, updateSubscription)
-  .get(subscribe,getCacheById, getSubscription)
+  .get(subscribe, getSubscription)
   .delete(subscribe, admin, deleteSubscription);
 
 export default router;

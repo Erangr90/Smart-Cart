@@ -10,10 +10,7 @@ docker compose -f docker-compose-dev.yml down || {
     exit 1
 }
 
-docker compose -f docker-compose-redis.yml --env-file redis.env down || {
-    echo "Error: Failed to stop app container"
-    exit 1
-}
+
 
 docker compose -f docker-compose-mongo-auth.yml --env-file mongo-variables.env down || {
     echo "Error: Failed to start mongo-auth containers"
@@ -68,14 +65,7 @@ docker compose -f docker-compose-mongo-auth.yml --env-file mongo-variables.env u
 }
 
 
-
-# Start Redis replication containers
-docker compose -f docker-compose-redis.yml up --build -d || {
-    echo "Error: Failed to start redis containers"
-    exit 1
-}
-
-echo "****** Waiting for ${DELAY} seconds for Redis containers to go up ******"
+echo "****** Waiting for ${DELAY} seconds for mongo-auth containers to go up ******"
 sleep $DELAY
 
 # Start the application containers

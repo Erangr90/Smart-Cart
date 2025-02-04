@@ -51,10 +51,10 @@ const userSchema = mongoose.Schema(
         default: 0
       }
     },
-    subscriptions: [{
+    subscription: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Subscription',
-    }],
+    },
     cart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Cart',
@@ -86,43 +86,6 @@ const User = mongoose.model('User', userSchema);
 
 const changeStream = User.watch();
 
-// changeStream.on('change', async (change) => {
-
-//   const { operationType, fullDocument, updateDescription, documentKey, ns } = change;
-
-//   switch (operationType) {
-//     case "insert":
-//       let user = await User.findById(fullDocument._id);
-//       await redisClient.set(
-//         `${ns.coll}:${fullDocument._id}`,
-//         JSON.stringify(user),
-//       );
-//       break;
-//     case "update":
-//       const updatedFields = updateDescription.updatedFields;
-//       let redisCache = await redisClient.get(`${ns.coll}:${documentKey._id}`);
-//       if(updatedFields.stores || !redisCache){
-//         let user = await User.findById(documentKey._id);
-//         await redisClient.set(`${ns.coll}:${documentKey._id}`, JSON.stringify(user));
-//       } else{
-//           redisCache = await JSON.parse(redisCache);
-//           for (const field in updatedFields) {
-//             redisCache[field] = updatedFields[field];
-//           } 
-//           await redisClient.set(`${ns.coll}:${documentKey._id}`, JSON.stringify(redisCache));
-//       }
-//       break;
-//     case "delete":
-//       await redisClient.del(`${ns.coll}:${documentKey._id}`);
-//       break;
-//     default:
-//       break;
-//   }
-// });
-
-// changeStream.on('error', (error) => {
-//   console.error('Change stream error:', error);
-// });
 
 
 export default User;

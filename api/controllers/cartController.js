@@ -2,7 +2,6 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import Cart from '../models/cartModel.js';
 import Chain from "../models/chainModel.js";
 import distance from "../utils/distance.js";
-// import redisClient from "../config/redis.js";
 
 
 // @desc    Get all user's carts
@@ -10,19 +9,6 @@ import distance from "../utils/distance.js";
 // @access  Subscribe
 const getCartsByUser = asyncHandler(async (req, res) => {
   let carts = null;
-  // try {
-  //   const keys = await redisClient.get(`carts:${req.user.id}:*`)
-  //   if(keys && keys.length > 0){
-  //     carts = []
-  //     for (const key of keys) {
-  //       const value = await redisClient.get(key);
-  //       const parseValue = await JSON.parse(value);
-  //       carts.push(parseValue);
-  //     }
-  //   }
-  // } catch (error) {
-  //   console.error(error)
-  // }
   if (!carts) {
     carts = await Cart.find({ user: req.user._id }).populate({
       path: 'user',

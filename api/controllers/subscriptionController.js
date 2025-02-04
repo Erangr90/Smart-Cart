@@ -48,7 +48,7 @@ const updateSubscription = asyncHandler(async (req, res) => {
     for (let key in req.body) {
       if (req.body.hasOwnProperty(key)) {
         // subscription's fields validation
-        if (req.body[key] == "" || (typeof req.body[key] === 'string' && req.body[key].trim() == "")) {
+        if ((typeof req.body[key] === 'string' && req.body[key].trim() == "")) {
           res.status(400);
           throw new Error(`Invalid ${key}`);
         }
