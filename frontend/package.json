@@ -20,7 +20,8 @@
     "react-redux": "*",
     "react-router-bootstrap": "*",
     "react-router-dom": "*",
-    "react-toastify": "*"
+    "react-toastify": "*",
+    "react-multi-carousel": "*"
   },
   "scripts": {
     "start": "react-scripts start",

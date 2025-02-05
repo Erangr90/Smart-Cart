@@ -44,6 +44,7 @@ import { Provider } from 'react-redux';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
+      {/* Home */}
       <Route index={true} path='/' element={<HomeScreen />} />
       <Route path='/search/:keyword' element={<HomeScreen />} />
       <Route path='/page/:pageNumber' element={<HomeScreen />} />
@@ -51,13 +52,17 @@ const router = createBrowserRouter(
         path='/search/:keyword/page/:pageNumber'
         element={<HomeScreen />}
       />
+      {/* Auth */}
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
-      {/* Registered users */}
+      {/* Registered screens */}
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<ProfileScreen />} />
+        <Route path='/product/:id' element={<ProductDetails />} />
+        <Route path='/cart' element={<Cart />} />
+
       </Route>
-      {/* Admin users */}
+      {/* Admin screens */}
       <Route path='' element={<AdminRoute />}>
         {/* Users */}
         <Route path='/admin/users' element={<UsersList />} />
@@ -112,15 +117,12 @@ const router = createBrowserRouter(
         <Route exact path='/admin/products/search/:keyword/page/:pageNumber' element={<ProductsList />} />
         <Route path='/admin/product/:id/edit' element={<EditProduct />} />
         <Route path='/admin/product/:id/prices' element={<ProductPricesList />} />
-        <Route path='/product/:id' element={<ProductDetails />} />
         {/* Subscriptions */}
         <Route path='/admin/subscriptions' element={<SubscriptionsList />} />
         <Route path='/admin/subscription/:id/edit' element={<EditSubscription />} />
         {/* Units Of Measure */}
         <Route path='/admin/unitsOfMeasure' element={<UnitsOfMeasureList />} />
         <Route path='/admin/unitOfMeasure/:id/edit' element={<EditUnitOfMeasure />} />
-        {/* Cart */}
-        <Route path='/cart' element={<Cart />} />
       </Route>
     </Route>
   )

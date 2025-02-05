@@ -27,15 +27,6 @@ const CategoriesList = () => {
     pageNumber,
   });
 
-  const { userInfo } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (userInfo) {
-      if (!userInfo.isAdmin) {
-        navigate("/");
-      }
-    }
-
-  }, [userInfo]);
 
 
 

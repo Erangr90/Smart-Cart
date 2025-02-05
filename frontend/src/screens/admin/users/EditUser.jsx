@@ -14,6 +14,8 @@ import {
   useGetUserDetailsQuery,
   useUpdateUserMutation,
 } from '../../../slices/usersApiSlice';
+import { updateUserInfo } from "../../../slices/userSlice";
+import { useDispatch, useSelector } from 'react-redux';
 
 // The component
 const EditUser = () => {
@@ -30,11 +32,14 @@ const EditUser = () => {
   const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await updateUser({ userId, isAdmin });
+      const res = await updateUser({ userId, isAdmin });
+      dispatch(updateUserInfo({ ...res.data }));
       toast.success('user updated successfully');
       refetch();
       navigate('/admin/users');

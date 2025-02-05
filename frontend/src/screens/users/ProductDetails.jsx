@@ -29,7 +29,7 @@ const ProductDetails = () => {
 
     const addToCartHandler = () => {
         dispatch(addToCart({ ...product, qty }));
-        navigate('/cart');
+        navigate('/');
     };
 
     const {

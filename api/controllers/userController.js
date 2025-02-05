@@ -284,11 +284,11 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
   }
   // Find the user
-  const user = await User.findById(req.body._id);
+  const user = await User.findById(req.body.userId);
   if (user) {
     // Update user filed by admin
     user.clicks = req.body.clicks || user.clicks;
-    user.subscriptions = req.body.subscriptions || user.subscriptions;
+    user.subscriptions = req.body.subscription || user.subscription;
     user.isSubtribe = req.body.isSubtribe != undefined ? req.body.isSubtribe : user.isSubtribe;
     user.isAdmin = req.body.isAdmin != undefined ? req.body.isAdmin : user.isAdmin;
     // Save changes

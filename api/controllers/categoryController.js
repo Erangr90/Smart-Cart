@@ -126,6 +126,14 @@ const getCategoryById = asyncHandler(async (req, res) => {
       populate: {
         path: 'prices',
         select: '-product',
+        populate: {
+          path: 'chain',
+          select: '-prices',
+          populate: {
+            path: 'stores',
+            select: '-prices',
+          }
+        }
       }
     });
   if (!category) {
