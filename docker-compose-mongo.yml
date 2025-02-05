@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   mongo1:
     container_name: mongo1
@@ -12,8 +12,7 @@ services:
     ports:
       - 27017:27017
     restart: always
-    entrypoint: [ "/usr/bin/mongod" ,"--bind_ip_all", "--replSet", "dbrs"]
-
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
 
   mongo2:
     container_name: mongo2
@@ -21,12 +20,11 @@ services:
     volumes:
       - ./mongo/data2:/data/db
     ports:
-      - 27018:27017
+      - 27018:27018
     restart: always
     networks:
       - mongo-network
-    entrypoint: [ "/usr/bin/mongod" ,"--bind_ip_all", "--replSet", "dbrs"]
-
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
 
   mongo3:
     container_name: mongo3
@@ -34,18 +32,16 @@ services:
     volumes:
       - ./mongo/data3:/data/db
     ports:
-      - 27019:27017
+      - 27019:27019
     restart: always
     networks:
       - mongo-network
-    entrypoint: [ "/usr/bin/mongod" ,"--bind_ip_all", "--replSet", "dbrs"]
-
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
 
 volumes:
   mongo1: {}
   mongo2: {}
   mongo3: {}
-
 
 networks:
   mongo-network:

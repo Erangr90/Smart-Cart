@@ -58,6 +58,8 @@ docker compose -f docker-compose-mongo.yml down || {
     echo "Error: Failed to stop mongo containers"
     exit 1
 }
+echo "****** Waiting for ${DELAY} seconds for Mongo containers down ******"
+sleep $DELAY
 
 docker compose -f docker-compose-mongo-auth.yml --env-file mongo-variables.env up  --build -d || {
     echo "Error: Failed to start mongo-auth containers"
