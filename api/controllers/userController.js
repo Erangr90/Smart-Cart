@@ -284,7 +284,7 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
   }
   // Find the user
-  const user = await User.findById(req.body.userId);
+  const user = await User.findById(req.body._id);
   if (user) {
     // Update user filed by admin
     user.clicks = req.body.clicks || user.clicks;

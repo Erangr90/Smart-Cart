@@ -2,6 +2,8 @@
 
 import Product from "../components/Product";
 import ProductCarousel from "../components/ProductCarousel";
+import '../assets/styles/index.css';
+
 
 
 
