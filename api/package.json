@@ -13,7 +13,6 @@
   "author": "Eran Grady",
   "license": "ISC",
   "dependencies": {
-    "nodemon": "*",
     "bcryptjs": "*",
     "colors": "*",
     "cookie-parser": "*",
@@ -30,7 +29,6 @@
     "pm2": "*"
   },
   "devDependencies": {
-    "nodemon": "*",
-    "mongodb-memory-server": "*"
+    "nodemon": "*"
   }
 }
