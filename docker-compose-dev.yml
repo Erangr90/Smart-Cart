@@ -12,8 +12,6 @@ services:
     volumes:
       - /usr/src/app/node_modules
       - ./api:/usr/src/app
-    expose:
-      - 7743
 
   frontend:
     build:
@@ -27,10 +25,6 @@ services:
     volumes:
       - /usr/src/app/node_modules
       - ./frontend:/usr/src/app
-    environment:
-      - WDS_SOCKET_PORT=0
-    expose:
-      - 3000
 
   nginx:
     container_name: nginx
