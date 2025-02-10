@@ -1,13 +1,15 @@
-version: "3.9"
+version: "3"
 services:
   mongo1:
     container_name: mongo1
     image: mongo:latest
+    env_file:
+      - ./.env.mongo-variables
     volumes:
       - ./scripts/mongo/rs-init.sh:/scripts/rs-init.sh
       - ./mongo/data1:/data/db
     networks:
-      - api-network
+      - smart-cart-network
       - mongo-network
     ports:
       - 27017:27017
@@ -17,10 +19,12 @@ services:
   mongo2:
     container_name: mongo2
     image: mongo:latest
+    env_file:
+      - ./.env.mongo-variables
     volumes:
       - ./mongo/data2:/data/db
     ports:
-      - 27018:27018
+      - 27018:27017
     restart: always
     networks:
       - mongo-network
@@ -29,10 +33,12 @@ services:
   mongo3:
     container_name: mongo3
     image: mongo:latest
+    env_file:
+      - ./.env.mongo-variables
     volumes:
       - ./mongo/data3:/data/db
     ports:
-      - 27019:27019
+      - 27019:27017
     restart: always
     networks:
       - mongo-network
@@ -46,6 +52,6 @@ volumes:
 networks:
   mongo-network:
     driver: bridge
-  api-network:
+  smart-cart-network:
     external: true
-    name: api-network
+    name: smart-cart-network

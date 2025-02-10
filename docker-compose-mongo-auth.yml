@@ -1,10 +1,10 @@
-version: "3.9"
+version: "3"
 services:
   mongo1:
     container_name: mongo1
     image: mongo:latest
     env_file:
-      - mongo-variables.env
+      - ./.env.mongo-variables
     environment:
       - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
@@ -14,7 +14,7 @@ services:
       - ./mongo/data1:/data/db
       - ./mongo/key/keyfile.key:/data/keyfile.key
     networks:
-      - api-network
+      - smart-cart-network
       - mongo-network
     ports:
       - 27017:27017
@@ -33,7 +33,7 @@ services:
     container_name: mongo2
     image: mongo:latest
     env_file:
-      - mongo-variables.env
+      - ./.env.mongo-variables
     environment:
       - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
@@ -41,7 +41,7 @@ services:
       - ./mongo/data2:/data/db
       - ./mongo/key/keyfile.key:/data/keyfile.key
     ports:
-      - 27018:27018
+      - 27018:27017
     restart: always
     networks:
       - mongo-network
@@ -59,7 +59,7 @@ services:
     container_name: mongo3
     image: mongo:latest
     env_file:
-      - mongo-variables.env
+      - ./.env.mongo-variables
     environment:
       - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
@@ -67,7 +67,7 @@ services:
       - ./mongo/data3:/data/db
       - ./mongo/key/keyfile.key:/data/keyfile.key
     ports:
-      - 27019:27019
+      - 27019:27017
     restart: always
     networks:
       - mongo-network
@@ -89,6 +89,6 @@ volumes:
 networks:
   mongo-network:
     driver: bridge
-  api-network:
+  smart-cart-network:
     external: true
-    name: api-network
+    name: smart-cart-network

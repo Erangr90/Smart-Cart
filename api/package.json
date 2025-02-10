@@ -5,8 +5,8 @@
   "description": "Node.js Express RESTful API",
   "main": "server.js",
   "scripts": {
-    "start": "npm start",
-    "dev": "nodemon server",
+    "start": "pm2-runtime start server.js --name api",
+    "dev": "nodemon",
     "data:import": "node seeder",
     "data:destroy": "node seeder -d"
   },
@@ -26,7 +26,8 @@
     "rotating-file-stream": "3.2.1",
     "dotenv": "*",
     "path": "*",
-    "axios": "*"
+    "axios": "*",
+    "pm2": "*"
   },
   "devDependencies": {
     "nodemon": "*",
