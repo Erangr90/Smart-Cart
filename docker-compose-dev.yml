@@ -10,8 +10,8 @@ services:
     env_file:
       - ./api/.env.development
     volumes:
-      - /usr/src/app/node_modules
-      - ./api:/usr/src/app
+      - /app/node_modules
+      - ./api:/app
 
   frontend:
     build:
@@ -23,12 +23,13 @@ services:
     depends_on:
       - api
     volumes:
-      - /usr/src/app/node_modules
-      - ./frontend:/usr/src/app
+      - /app/node_modules
+      - ./frontend:/app
 
   nginx:
-    container_name: nginx
-    image: nginx:latest
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
     depends_on:
       - api
       - frontend
