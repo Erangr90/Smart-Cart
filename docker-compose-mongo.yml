@@ -5,8 +5,11 @@ services:
     image: mongo:latest
     env_file:
       - ./.env.mongo-variables
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - ./scripts/mongo/rs-init.sh:/scripts/rs-init.sh
+      - ./scripts/rs-init.sh:/scripts/rs-init.sh
       - ./mongo/data1:/data/db
     networks:
       - smart-cart-network
@@ -21,13 +24,17 @@ services:
     image: mongo:latest
     env_file:
       - ./.env.mongo-variables
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./mongo/data2:/data/db
     ports:
-      - 27018:27017
+      - 27018:27018
     restart: always
     networks:
       - mongo-network
+      - smart-cart-network
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
 
   mongo3:
@@ -35,19 +42,23 @@ services:
     image: mongo:latest
     env_file:
       - ./.env.mongo-variables
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./mongo/data3:/data/db
     ports:
-      - 27019:27017
+      - 27019:27019
     restart: always
     networks:
       - mongo-network
+      - smart-cart-network
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
 
 volumes:
-  mongo1: {}
-  mongo2: {}
-  mongo3: {}
+  data1: {}
+  data2: {}
+  data3: {}
 
 networks:
   mongo-network:

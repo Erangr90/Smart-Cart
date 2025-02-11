@@ -2,4 +2,5 @@ mongo/data1/
 mongo/data2/
 mongo/data3/
 
-api/logs
+
+/api/logs

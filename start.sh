@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DELAY=10
+DELAY=20
 
 
 # Stop containers
@@ -11,7 +11,7 @@ docker compose -f docker-compose-dev.yml down || {
 }
 
 
-docker compose -f docker-compose-mongo-auth.yml down || {
+docker compose -f docker-compose-mongo.yml down || {
     echo "Error: Failed to start mongo-auth containers"
     exit 1
 }
@@ -29,7 +29,7 @@ fi
 
 
 # Start Mongodb replication containers
-docker compose -f docker-compose-mongo.yml up --build -d || {
+docker compose -f docker-compose-mongo.yml --env-file .env.mongo-variables up --build -d || {
     echo "Error: Failed to start mongo containers"
     exit 1
 }
@@ -46,24 +46,11 @@ docker exec mongo1 bash -c "/scripts/rs-init.sh" || {
 }
 
 
-docker compose -f docker-compose-mongo.yml down || {
-    echo "Error: Failed to stop mongo containers"
-    exit 1
-}
-echo "****** Waiting for ${DELAY} seconds for Mongo containers down ******"
-sleep $DELAY
-
-docker compose -f docker-compose-mongo-auth.yml --env-file ./.env.mongo-variables up  --build -d || {
-    echo "Error: Failed to start mongo-auth containers"
-    exit 1
-}
-
-
-echo "****** Waiting for ${DELAY} seconds for mongo-auth containers to go up ******"
-sleep $DELAY
-
 # Start the application containers
 docker compose -f docker-compose-dev.yml up --build -d || {
     echo "Error: Failed to start application containers"
     exit 1
 }
+
+echo "****** Waiting for ${DELAY} seconds for api and frontend containers to go up ******"
+sleep $DELAY

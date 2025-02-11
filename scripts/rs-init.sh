@@ -18,12 +18,12 @@ var config = {
         },
         {
             "_id": 2,
-            "host": "mongo2:27017",
+            "host": "mongo2:27018",
             "priority": 0
         },
         {
             "_id": 3,
-            "host": "mongo3:27017",
+            "host": "mongo3:27019",
             "priority": 0
         }
     ]
@@ -36,9 +36,12 @@ echo "****** Waiting for ${DELAY} seconds for Mongo replica-set configuration to
 
 sleep $DELAY
 
+# Create user permission for DB 
 mongosh <<EOF
 
 rs.status()
+
+
 admin = db.getSiblingDB("admin")
 admin.createUser(
   {

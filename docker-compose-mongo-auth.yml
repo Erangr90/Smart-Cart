@@ -6,13 +6,12 @@ services:
     env_file:
       - ./.env.mongo-variables
     environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME= adminUser
+      - MONGO_INITDB_ROOT_PASSWORD= adminPass
     volumes:
-      - ./scripts/mongo/rs-init.sh:/scripts/rs-init.sh
-      - ./scripts/mongo/init.js:/scripts/init.js
+      - ./scripts/rs-init.sh:/scripts/rs-init.sh
       - ./mongo/data1:/data/db
-      - ./mongo/key/keyfile.key:/data/keyfile.key
+      - ./mongo/key/keyfile.key:/key/keyfile.key
     networks:
       - smart-cart-network
       - mongo-network
@@ -23,7 +22,7 @@ services:
       [
         "/usr/bin/mongod",
         "--keyFile",
-        "/data/keyfile.key",
+        "/key/keyfile.key",
         "--replSet",
         "dbrs",
         "--bind_ip_all",
@@ -35,11 +34,11 @@ services:
     env_file:
       - ./.env.mongo-variables
     environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME= adminUser
+      - MONGO_INITDB_ROOT_PASSWORD= adminPass
     volumes:
       - ./mongo/data2:/data/db
-      - ./mongo/key/keyfile.key:/data/keyfile.key
+      - ./mongo/key/keyfile.key:/key/keyfile.key
     ports:
       - 27018:27017
     restart: always
@@ -49,7 +48,7 @@ services:
       [
         "/usr/bin/mongod",
         "--keyFile",
-        "/data/keyfile.key",
+        "/key/keyfile.key",
         "--replSet",
         "dbrs",
         "--bind_ip_all",
@@ -61,11 +60,11 @@ services:
     env_file:
       - ./.env.mongo-variables
     environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME= adminUser
+      - MONGO_INITDB_ROOT_PASSWORD= adminPass
     volumes:
       - ./mongo/data3:/data/db
-      - ./mongo/key/keyfile.key:/data/keyfile.key
+      - ./mongo/key/keyfile.key:/key/keyfile.key
     ports:
       - 27019:27017
     restart: always
@@ -75,7 +74,7 @@ services:
       [
         "/usr/bin/mongod",
         "--keyFile",
-        "/data/keyfile.key",
+        "/key/keyfile.key",
         "--replSet",
         "dbrs",
         "--bind_ip_all",
