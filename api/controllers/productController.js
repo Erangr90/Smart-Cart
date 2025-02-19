@@ -60,7 +60,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
     products = sortByCategory(products);
   }
-  
+
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
@@ -176,6 +176,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
+  console.log(req.body);
+  console.log(req.params);
   // Find the product
   const product = await Product.findById(req.params.id);
   if (product) {
@@ -244,6 +246,12 @@ const deleteProduct = asyncHandler(async (req, res) => {
     throw new Error('Product not found');
   }
 });
+
+const getTopViewsProducts = asyncHandler(async(req,res)=>{
+
+  const products = await Product.find({}).sort({ views: -1 }).limit(30)
+
+})
 
 
 export {

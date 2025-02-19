@@ -284,7 +284,7 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
   }
   // Find the user
-  const user = await User.findById(req.body._id);
+  const user = await User.findById(req.params.id);
   if (user) {
     // Update user filed by admin
     user.clicks = req.body.clicks || user.clicks;
@@ -311,6 +311,38 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const userClicksAndSubtribe = asyncHandler(async (req, res) => {
+
+  // Request validation
+  if (!req.params || !req.params.id || !req.body) {
+    res.status(400);
+    throw new Error("Invalid request");
+  }
+  // Find the user
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.clicks = req.body.clicks || user.clicks;
+    user.subscriptions = req.body.subscription || user.subscription;
+    // Save changes
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: user._id,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      email: updatedUser.email,
+      subscriptions: updatedUser.subscriptions,
+      isAdmin: updatedUser.isAdmin,
+      isSubtribe: updatedUser.isSubtribe,
+      clicks: updatedUser.clicks
+    });
+    console.log(updatedUser.clicks);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+});
 
 
 export {
@@ -323,4 +355,5 @@ export {
   deleteUser,
   getUserById,
   updateUser,
+  userClicksAndSubtribe
 };

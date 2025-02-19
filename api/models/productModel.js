@@ -149,6 +149,9 @@ const productSchema = mongoose.Schema(
       //   message: props => `${props.value} is not valid`
       // }
     },
+    views: {
+      type: Number
+    }
 
   },
   {

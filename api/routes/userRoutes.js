@@ -9,6 +9,7 @@ import {
   deleteUser,
   getUserById,
   updateUser,
+  userClicksAndSubtribe
 } from "../controllers/userController.js";
 import { subscribe, admin } from "../middleware/authMiddleware.js";
 
@@ -25,5 +26,7 @@ router
   .delete(subscribe, admin, deleteUser)
   .get(subscribe, admin, getUserById)
   .put(subscribe, admin, updateUser);
+
+router.route("/update/:id").put(subscribe, userClicksAndSubtribe);
 
 export default router;

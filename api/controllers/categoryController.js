@@ -48,7 +48,7 @@ const getCategories = asyncHandler(async (req, res) => {
 // @access  Subscribe
 const getAllCategories = asyncHandler(async (req, res) => {
 
-  let categories = await Category.find();
+  let categories = await Category.find().select("-products");
   categories = sortByName(categories);
   res.status(200).json(categories);
 

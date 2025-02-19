@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import "react-multi-carousel/lib/styles.css";
+
 import './assets/styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -39,6 +39,7 @@ import StorePricesList from './screens/admin/stores/StorePricesList';
 import ChainPricesList from './screens/admin/chains/ChainPricesList';
 import ProductDetails from "./screens/users/ProductDetails";
 import Cart from "./screens/users/Cart";
+import CategoryScreen from './screens/users/CategoryScreen';
 import store from './store';
 import { Provider } from 'react-redux';
 
@@ -53,15 +54,15 @@ const router = createBrowserRouter(
         path='/search/:keyword/page/:pageNumber'
         element={<HomeScreen />}
       />
+      <Route path='/product/:id' element={<ProductDetails />} />
+      <Route path='/category/:id' element={<CategoryScreen />} />
       {/* Auth */}
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
       {/* Registered screens */}
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<ProfileScreen />} />
-        <Route path='/product/:id' element={<ProductDetails />} />
         <Route path='/cart' element={<Cart />} />
-
       </Route>
       {/* Admin screens */}
       <Route path='' element={<AdminRoute />}>

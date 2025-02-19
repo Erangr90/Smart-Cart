@@ -141,7 +141,7 @@ const EditProduct = () => {
 
             <Form.Group controlId='image'>
 
-              <Image src={`/api/${image}`} rounded className="w-50 m-3 d-grid gap-2" />
+              <Image style={{ width: '12rem' }} src={`/api/${image}`} rounded className="m-3 d-grid gap-2" />
               <Form.Label>תמונה</Form.Label>
 
               {/* <Form.Control

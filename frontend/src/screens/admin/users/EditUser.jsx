@@ -32,14 +32,12 @@ const EditUser = () => {
   const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await updateUser({ userId, isAdmin });
-      dispatch(updateUserInfo({ ...res.data }));
+      await updateUser({ userId, isAdmin });
       toast.success('user updated successfully');
       refetch();
       navigate('/admin/users');

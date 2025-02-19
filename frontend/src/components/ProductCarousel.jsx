@@ -1,5 +1,6 @@
 
 import Product from "./Product";
+import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
 
 
@@ -30,10 +31,11 @@ const ProductCarousel = ({ productsIds }) => {
 
 
   return (
-    <Carousel responsive={responsive}>
+
+    <Carousel rtl={true} responsive={responsive}>
       {
         productsIds.map((id) => (
-          <Product key={id} productId={id} />
+          <Product className="mx-3" key={id} productId={id} />
         ))
       }
     </Carousel>

@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 import { useGetChainsQuery } from "../../slices/chainsApiSlice";
 import { toast } from 'react-toastify';
 import {
-  useUpdateUserMutation,
+  useUserClicksAndSubtribeMutation,
 
 } from "../../slices/usersApiSlice";
 import { updateUserInfo } from "../../slices/userSlice";
@@ -62,7 +62,7 @@ const Cart = () => {
   };
 
 
-  const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
+  const [updateUserClicks, { isLoading: loadingUpdate }] = useUserClicksAndSubtribeMutation();
   const [calcCart, { isLoading: loading }] = useCartCalculationMutation();
 
   const checkoutHandler = async () => {
@@ -84,7 +84,7 @@ const Cart = () => {
             numOfClicks: 1
           };
           try {
-            const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
+            const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
             dispatch(updateUserInfo({ ...res1 }));
             const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
             setSum(res2.sum);
@@ -98,7 +98,7 @@ const Cart = () => {
             numOfClicks: userInfo.clicks.numOfClicks + 1
           };
           try {
-            const res1 = await updateUser({ ...userInfo, clicks }).unwrap();
+            const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
             dispatch(updateUserInfo({ ...res1 }));
             const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
             setSum(res2.sum);

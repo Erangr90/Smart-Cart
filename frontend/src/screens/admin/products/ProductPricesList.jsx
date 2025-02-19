@@ -85,7 +85,7 @@ const ProductPricesList = () => {
                         <h1>מחירי מוצר {product.name} </h1>
                     }
                     {
-                        product.image && <Image src={`/api/${product.image}`} rounded className="w-25 m-1" />
+                        product.image && <Image style={{ width: '12rem' }} src={`/api/${product.image}`} rounded />
                     }
                     <div>
                         <Form>

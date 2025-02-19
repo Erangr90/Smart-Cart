@@ -17,6 +17,7 @@ docker compose -f docker-compose-mongo.yml down || {
 }
 
 
+
 # Check if smart-cart-network exists if not create one
 docker network inspect smart-cart-network > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -25,6 +26,9 @@ if [ $? -ne 0 ]; then
     exit 1
   }
 fi
+
+echo "****** Waiting for ${DELAY} seconds for build network ******"
+sleep $DELAY
 
 
 

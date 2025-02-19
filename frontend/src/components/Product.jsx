@@ -95,7 +95,7 @@ const Product = ({ productId }) => {
                 });
             } else {
                 let tempStores = [];
-                for (let store of price.chain.stores) {
+                for (let store of price.chain?.stores) {
                     let dis = distance(position.latitude, store?.location.latitude, position.longitude, store?.location.longitude).toFixed(2);
                     tempStores.push({
                         ...store,
@@ -137,9 +137,9 @@ const Product = ({ productId }) => {
                         </Card.Text>
                     </Card.Body>
                     <ListGroup className="list-group-flush">
-                        <ListGroup.Item>{String(prices[0]?.number) + "0" + ` ש"ח`}{" - "}{stores[0]?.name + ", " + stores[0]?.dis + ` ק"מ` + "."}</ListGroup.Item>
-                        <ListGroup.Item>{String(prices[1]?.number) + "0" + ` ש"ח`}{" - "}{stores[1]?.name + ", " + stores[1]?.dis + ` ק"מ` + "."}</ListGroup.Item>
-                        <ListGroup.Item>{String(prices[2]?.number) + "0" + ` ש"ח`}{" - "}{stores[2]?.name + ", " + stores[2]?.dis + ` ק"מ` + "."}</ListGroup.Item>
+                        <ListGroup.Item>{String(prices[0]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[0]?.name + ", " + stores[0]?.dis + ` ק"מ` + "."}</ListGroup.Item>
+                        <ListGroup.Item>{String(prices[1]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[1]?.name + ", " + stores[1]?.dis + ` ק"מ` + "."}</ListGroup.Item>
+                        <ListGroup.Item>{String(prices[2]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[2]?.name + ", " + stores[2]?.dis + ` ק"מ` + "."}</ListGroup.Item>
                     </ListGroup>
                     <Card.Body>
                         <Stack gap={2}>

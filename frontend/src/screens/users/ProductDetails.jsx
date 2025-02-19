@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import {
     useGetProductDetailsQuery,
+    useUpdateProductMutation
 } from '../../slices/productsApiSlice';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -27,9 +28,18 @@ const ProductDetails = () => {
     const [qty, setQty] = useState(1);
 
 
-    const addToCartHandler = () => {
-        dispatch(addToCart({ ...product, qty }));
-        navigate('/');
+    const addToCartHandler = async () => {
+        dispatch(addToCart({ ...product, prices: [], qty }));
+        try {
+            if (!product.views) {
+                await updateProduct({ ...product, views: 1, productId: product._id }).unwrap();
+            } else {
+                await updateProduct({ ...product, views: product.views + 1, productId: product._id }).unwrap();
+            }
+        } catch (err) {
+            console.log(err?.data?.message || err.error);
+        }
+        navigate(-1);
     };
 
     const {
@@ -39,7 +49,9 @@ const ProductDetails = () => {
         error,
     } = useGetProductDetailsQuery(productId);
 
+    const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
 
+    console.log(product);
     return (
         <>
             <Link className='btn btn-light my-3' to='/'>
