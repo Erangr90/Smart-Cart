@@ -1,18 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Form, Button, Image, Card, ListGroup, Stack } from 'react-bootstrap';
-import Loader from './Loader';
-import Message from './Message';
+import { Card, ListGroup, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-
-import {
-    useGetProductTopPricesQuery,
-} from '../slices/productsApiSlice';
 
 import distance from "../utils/distance";
 
 
-const Product = ({ productId }) => {
+const Product = ({ product }) => {
     const [name, setName] = useState('');
     const [manufacturer, setManufacturer] = useState('');
     const [category, setCategory] = useState('');
@@ -27,14 +21,6 @@ const Product = ({ productId }) => {
     const [position, setPosition] = useState({ latitude: null, longitude: null });
     const [stores, setStores] = useState([]);
 
-
-
-    const {
-        data: product,
-        isLoading,
-        error,
-        refetch,
-    } = useGetProductTopPricesQuery(productId);
 
 
 
@@ -118,42 +104,34 @@ const Product = ({ productId }) => {
     }, [prices]);
     return (
         <>
-            {isLoading ? (
-                <Loader />
-            ) : error ? (
-                <Message variant="danger">
-                    {error?.data?.message || error.error}
-                </Message>
-            ) : (
-                <Card style={{ width: '14rem' }}>
 
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Card.Img style={{ width: '12rem' }} variant="top" src={`/api/${image}`} />
-                    </div>
-                    <Card.Body>
-                        <Card.Title>{name}</Card.Title>
-                        <Card.Text>
-                            {description + ", " + manufacturer + "."}
-                        </Card.Text>
-                    </Card.Body>
-                    <ListGroup className="list-group-flush">
-                        <ListGroup.Item>{String(prices[0]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[0]?.name + ", " + stores[0]?.dis + ` ק"מ` + "."}</ListGroup.Item>
-                        <ListGroup.Item>{String(prices[1]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[1]?.name + ", " + stores[1]?.dis + ` ק"מ` + "."}</ListGroup.Item>
-                        <ListGroup.Item>{String(prices[2]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[2]?.name + ", " + stores[2]?.dis + ` ק"מ` + "."}</ListGroup.Item>
-                    </ListGroup>
-                    <Card.Body>
-                        <Stack gap={2}>
-                            <Link className='btn btn-light my-3' to={`/product/${productId}`}>
-                                הצג מוצר
-                            </Link>
-                            {/* <Card.Link href="#">הצג מוצר</Card.Link> */}
-                            {/* <Card.Link href="#">כל המחירים בעיר</Card.Link> */}
-                        </Stack>
-                    </Card.Body>
-                </Card>
+            <Card style={{ width: '14rem' }}>
 
-            )
-            }
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Card.Img style={{ width: '12rem' }} variant="top" src={`/api/${image}`} />
+                </div>
+                <Card.Body>
+                    <Card.Title>{name}</Card.Title>
+                    <Card.Text>
+                        {description + ", " + manufacturer + "."}
+                    </Card.Text>
+                </Card.Body>
+                <ListGroup className="list-group-flush">
+                    <ListGroup.Item>{String(prices[0]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[0]?.name + ", " + stores[0]?.dis + ` ק"מ` + "."}</ListGroup.Item>
+                    <ListGroup.Item>{String(prices[1]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[1]?.name + ", " + stores[1]?.dis + ` ק"מ` + "."}</ListGroup.Item>
+                    <ListGroup.Item>{String(prices[2]?.number.toFixed(2)) + ` ש"ח`}{" - "}{stores[2]?.name + ", " + stores[2]?.dis + ` ק"מ` + "."}</ListGroup.Item>
+                </ListGroup>
+                <Card.Body>
+                    <Stack gap={2}>
+                        <Link className='btn btn-light my-3' to={`/product/${product._id}`}>
+                            הצג מוצר
+                        </Link>
+                        {/* <Card.Link href="#">הצג מוצר</Card.Link> */}
+                        {/* <Card.Link href="#">כל המחירים בעיר</Card.Link> */}
+                    </Stack>
+                </Card.Body>
+            </Card>
+
         </>
     );
 };

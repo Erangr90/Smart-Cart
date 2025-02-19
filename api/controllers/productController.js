@@ -247,11 +247,45 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 });
 
-const getTopViewsProducts = asyncHandler(async(req,res)=>{
+const getTopViewsProducts = asyncHandler(async (req, res) => {
 
-  const products = await Product.find({}).sort({ views: -1 }).limit(30)
+  console.log("hereeeeeeeee");
 
-})
+  let products = await Product.find({}).sort({ views: -1 }).limit(1).populate({
+    path: 'category',
+    select: '-products',
+  })
+    .populate({
+      path: 'prices',
+      select: '-product',
+      populate: {
+        path: 'store chain',
+        select: '-prices',
+      },
+    });
+
+  for (let product of products) {
+    product.prices = sortByPrice(product.prices);
+    product.prices = [
+      product.prices[0],
+      product.prices[1],
+      product.prices[2],
+    ];
+    // Get store locations
+    for (let price of product.prices) {
+      if (price.chain) {
+        let temp = await Chain.findOne({ _id: price.chain._id }).populate({
+          path: 'stores',
+          select: '-prices',
+        });
+        price.chain.stores = temp.stores;
+      }
+    }
+  }
+  console.log(products);
+  return res.json(products);
+
+});
 
 
 export {
@@ -260,7 +294,8 @@ export {
   createProduct,
   updateProduct,
   deleteProduct,
-  getProductTopPrices
+  getProductTopPrices,
+  getTopViewsProducts
 };
 // --------------------------------------- Help Functions ------------------------------------
 function sortByCategory(arr) {

@@ -1,25 +1,37 @@
 
+import {
+  useGetTopProductsQuery
+} from "../slices/productsApiSlice";
+import { useEffect } from 'react';
+import Product from "../components/Product";
 
-import ProductCarousel from "../components/ProductCarousel";
 
-
-
-
-
-const arr = [
-  '679bc8e95c8a420064a782bd',
-  '679bc8e95c8a420064a782bd',
-  '679bc8e95c8a420064a782bd',
-  '679bc8e95c8a420064a782bd',
-  '679bc8e95c8a420064a782bd'
-];
 
 
 const HomeScreen = () => {
 
+  const {
+    data: products,
+    isLoading,
+    refetch,
+    error,
+  } = useGetTopProductsQuery();
+
+  useEffect(() => {
+    refetch();
+  }, [products]);
+
+
+
+  console.log(products);
   return (
     <>
-      <ProductCarousel productsIds={arr} />
+      {
+        products && products.length > 0 &&
+        products.map((pro) => (
+          <Product product={pro} />
+        ))
+      }
     </>
   );
 };
