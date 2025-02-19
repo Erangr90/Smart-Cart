@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Loader from '../../components/Loader';
+import { Row } from "react-bootstrap";
 import {
     useGetCategoryQuery
 } from "../../slices/categoriesApiSlice";
@@ -36,11 +37,15 @@ const CategoryScreen = () => {
                     products && products.length > 0 &&
                     <>
                         <h3>{name}</h3>
-                        {
-                            products.map((pro) => (
-                                <Product key={pro._id} productId={pro._id} />
-                            ))
-                        }
+                        <div className="horizontal-container">
+                            {
+                                products.map((pro) => (
+                                    <Product key={pro._id} product={pro} className="mx-2 my-3" />
+                                ))
+                            }
+
+                        </div>
+
                     </>
                 )
             }

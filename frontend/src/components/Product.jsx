@@ -73,7 +73,7 @@ const Product = ({ product }) => {
     const setDis = (prices) => {
         let arr = [];
         for (let price of prices) {
-            if (price.store) {
+            if (price?.store) {
                 let dis = distance(position.latitude, price?.store.location.latitude, position.longitude, price?.store.location.longitude).toFixed(2);
                 arr.push({
                     ...price.store,
@@ -81,15 +81,19 @@ const Product = ({ product }) => {
                 });
             } else {
                 let tempStores = [];
-                for (let store of price.chain?.stores) {
-                    let dis = distance(position.latitude, store?.location.latitude, position.longitude, store?.location.longitude).toFixed(2);
-                    tempStores.push({
-                        ...store,
-                        dis: dis
-                    });
+                if (price?.chain) {
+                    for (let store of price?.chain?.stores) {
+                        let dis = distance(position.latitude, store?.location.latitude, position.longitude, store?.location.longitude).toFixed(2);
+                        tempStores.push({
+                            ...store,
+                            dis: dis
+                        });
+                    }
+                    tempStores = sortByDis(tempStores);
+                    arr.push(tempStores[0]);
+
                 }
-                tempStores = sortByDis(tempStores);
-                arr.push(tempStores[0]);
+
             }
         }
         setStores(arr);
@@ -105,10 +109,10 @@ const Product = ({ product }) => {
     return (
         <>
 
-            <Card style={{ width: '14rem' }}>
+            <Card style={{ width: '14rem' }} className="flex-item">
 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Card.Img style={{ width: '12rem' }} variant="top" src={`/api/${image}`} />
+                    <Card.Img style={{ width: '8rem' }} variant="top" src={`/api/${image}`} />
                 </div>
                 <Card.Body>
                     <Card.Title>{name}</Card.Title>

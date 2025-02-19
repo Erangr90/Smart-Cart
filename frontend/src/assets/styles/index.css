@@ -32,3 +32,23 @@ table th {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
 }
+
+.horizontal-container {
+  display: grid;
+  grid-template-columns: repeat(
+    5,
+    1fr
+  ); /* This creates 5 equal-width columns */
+  gap: 10px;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap; /* Enables wrapping of items */
+  gap: 10px; /* Adjusts spacing between items */
+}
+
+.flex-item {
+  flex: 1 0 calc(20% - 10px); /* Each item takes up approximately 20% of the container width, minus gap */
+  box-sizing: border-box; /* Ensures padding and border are included in width calculation */
+}

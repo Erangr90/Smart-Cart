@@ -28,9 +28,11 @@ const HomeScreen = () => {
     <>
       {
         products && products.length > 0 &&
-        products.map((pro) => (
-          <Product product={pro} />
-        ))
+        <div className="horizontal-container">
+          {products.map((pro) => (
+            <Product product={pro} />
+          ))}
+        </div>
       }
     </>
   );

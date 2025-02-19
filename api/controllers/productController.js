@@ -249,7 +249,7 @@ const getTopViewsProducts = asyncHandler(async (req, res) => {
 
   console.log("hereeeeeeeee");
 
-  let products = await Product.find({}).sort({ views: -1 }).limit(1).populate({
+  let products = await Product.find({}).sort({ views: -1 }).limit(30).populate({
     path: 'category',
     select: '-products',
   })
@@ -271,7 +271,7 @@ const getTopViewsProducts = asyncHandler(async (req, res) => {
     ];
     // Get store locations
     for (let price of product.prices) {
-      if (price.chain) {
+      if (price?.chain) {
         let temp = await Chain.findOne({ _id: price.chain._id }).populate({
           path: 'stores',
           select: '-prices',
