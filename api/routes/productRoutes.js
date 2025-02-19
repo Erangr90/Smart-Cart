@@ -7,21 +7,23 @@ import {
   updateProduct,
   deleteProduct,
   getProductTopPrices,
-  getTopViewsProducts
-  // getSaleProducts,
+  getTopViewsProducts,
+  updateProductViews
 } from '../controllers/productController.js';
 import { subscribe, admin } from '../middleware/authMiddleware.js';
+
 
 router.route("/top").get(getTopViewsProducts);
 router.route('/').get(subscribe, getProducts).post(subscribe, admin, createProduct);
 router
   .route('/:id')
-  .get(subscribe, getProductById)
+  .get(getProductById)
   .put(subscribe, admin, updateProduct)
   .delete(subscribe, admin, deleteProduct);
 router
   .route('/:id/top_prices')
   .get(getProductTopPrices);
+router.route("/update_views/:id").put(subscribe, updateProductViews);
 
 
 

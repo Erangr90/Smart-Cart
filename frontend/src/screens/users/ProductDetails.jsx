@@ -13,7 +13,7 @@ import {
 } from 'react-bootstrap';
 import {
     useGetProductDetailsQuery,
-    useUpdateProductMutation
+    useUpdateProductViewsMutation
 } from '../../slices/productsApiSlice';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -27,14 +27,15 @@ const ProductDetails = () => {
 
     const [qty, setQty] = useState(1);
 
+    const [updateProductViews, { isLoading: loadingUpdate }] = useUpdateProductViewsMutation();
 
     const addToCartHandler = async () => {
         dispatch(addToCart({ ...product, prices: [], qty }));
         try {
             if (!product.views) {
-                await updateProduct({ ...product, views: 1, productId: product._id }).unwrap();
+                await updateProductViews({ ...product, views: 1, productId: product._id }).unwrap();
             } else {
-                await updateProduct({ ...product, views: product.views + 1, productId: product._id }).unwrap();
+                await updateProductViews({ ...product, views: product.views + 1, productId: product._id }).unwrap();
             }
         } catch (err) {
             console.log(err?.data?.message || err.error);
@@ -49,7 +50,7 @@ const ProductDetails = () => {
         error,
     } = useGetProductDetailsQuery(productId);
 
-    const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
+
 
     console.log(product);
     return (

@@ -176,8 +176,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
-  console.log(req.body);
-  console.log(req.params);
   // Find the product
   const product = await Product.findById(req.params.id);
   if (product) {
@@ -287,6 +285,37 @@ const getTopViewsProducts = asyncHandler(async (req, res) => {
 
 });
 
+const updateProductViews = asyncHandler(async (req, res) => {
+
+  // Request validation
+  if (!req.params || !req.params.id || !req.body) {
+    res.status(400);
+    throw new Error("Invalid request");
+  }
+  // Find the product
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    product.views = req.body.views;
+    // Save changes
+    let updatedProduct = await product.save();
+    updatedProduct = await Product.populate(updatedProduct,
+      {
+        path: 'category',
+        select: '-products',
+      },
+      {
+        path: 'prices',
+        select: '-product'
+      },
+    );
+    res.json(updatedProduct);
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+
+});
+
 
 export {
   getProducts,
@@ -295,7 +324,8 @@ export {
   updateProduct,
   deleteProduct,
   getProductTopPrices,
-  getTopViewsProducts
+  getTopViewsProducts,
+  updateProductViews
 };
 // --------------------------------------- Help Functions ------------------------------------
 function sortByCategory(arr) {
