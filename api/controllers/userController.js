@@ -27,7 +27,7 @@ const authUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       clicks: user.clicks,
-      subscriptions: user.subscriptions,
+      subscription: user.subscription,
       carts: user.carts,
       products: user.products,
       orders: user.orders,
@@ -126,7 +126,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      subscriptions: user.subscriptions,
+      subscription: user.subscription,
     });
   } else {
     res.status(404);
@@ -148,8 +148,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     // Check for duplicate users email
     if (req.body.email) {
-      const exists = await User.findOne({ email: req.body.email });
-      if (exists) {
+      const existsUser = await User.findOne({ email: req.body.email });
+      const flag = existsUser._id != req.body._id ? true : false;
+      if (flag) {
         res.status(400);
         throw new Error("Email already exists");
       }
@@ -189,11 +190,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     // Save changes
     const updatedUser = await user.save();
     res.json({
-      _id: updatedUser._id,
+      _id: user._id,
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      subscriptions: updatedUser.subscriptions,
+      subscription: updatedUser.subscriptions,
+      isAdmin: updatedUser.isAdmin,
+      isSubtribe: updatedUser.isSubtribe,
+      clicks: updatedUser.clicks
     });
   } else {
     res.status(404);
@@ -288,7 +292,7 @@ const updateUser = asyncHandler(async (req, res) => {
   if (user) {
     // Update user filed by admin
     user.clicks = req.body.clicks || user.clicks;
-    user.subscriptions = req.body.subscription || user.subscription;
+    user.subscription = req.body.subscription || user.subscription;
     user.isSubtribe = req.body.isSubtribe != undefined ? req.body.isSubtribe : user.isSubtribe;
     user.isAdmin = req.body.isAdmin != undefined ? req.body.isAdmin : user.isAdmin;
     // Save changes
@@ -299,7 +303,7 @@ const updateUser = asyncHandler(async (req, res) => {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      subscriptions: updatedUser.subscriptions,
+      subscription: updatedUser.subscription,
       isAdmin: updatedUser.isAdmin,
       isSubtribe: updatedUser.isSubtribe,
       clicks: updatedUser.clicks
@@ -322,7 +326,7 @@ const userClicksAndSubtribe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   if (user) {
     user.clicks = req.body.clicks || user.clicks;
-    user.subscriptions = req.body.subscription || user.subscription;
+    user.subscription = req.body.subscription || user.subscription;
     // Save changes
     const updatedUser = await user.save();
 
@@ -331,7 +335,7 @@ const userClicksAndSubtribe = asyncHandler(async (req, res) => {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      subscriptions: updatedUser.subscriptions,
+      subscription: updatedUser.subscription,
       isAdmin: updatedUser.isAdmin,
       isSubtribe: updatedUser.isSubtribe,
       clicks: updatedUser.clicks
