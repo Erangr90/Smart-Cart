@@ -6,8 +6,8 @@ services:
     env_file:
       - ./.env.mongo-variables
     environment:
-      - MONGO_INITDB_ROOT_USERNAME= adminUser
-      - MONGO_INITDB_ROOT_PASSWORD= adminPass
+      - MONGO_INITDB_ROOT_USERNAME= '${MONGO_INITDB_ROOT_USERNAME}'
+      - MONGO_INITDB_ROOT_PASSWORD= '${MONGO_INITDB_ROOT_PASSWORD}'
     volumes:
       - ./scripts/rs-init.sh:/scripts/rs-init.sh
       - ./mongo/data1:/data/db
@@ -21,21 +21,16 @@ services:
     entrypoint:
       [
         "/usr/bin/mongod",
-        "--keyFile",
-        "/key/keyfile.key",
         "--replSet",
         "dbrs",
         "--bind_ip_all",
+        "--keyFile",
+        "/key/keyfile.key",
       ]
 
   mongo2:
     container_name: mongo2
     image: mongo:latest
-    env_file:
-      - ./.env.mongo-variables
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME= adminUser
-      - MONGO_INITDB_ROOT_PASSWORD= adminPass
     volumes:
       - ./mongo/data2:/data/db
       - ./mongo/key/keyfile.key:/key/keyfile.key
@@ -47,21 +42,16 @@ services:
     entrypoint:
       [
         "/usr/bin/mongod",
-        "--keyFile",
-        "/key/keyfile.key",
         "--replSet",
         "dbrs",
         "--bind_ip_all",
+        "--keyFile",
+        "/key/keyfile.key",
       ]
 
   mongo3:
     container_name: mongo3
     image: mongo:latest
-    env_file:
-      - ./.env.mongo-variables
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME= adminUser
-      - MONGO_INITDB_ROOT_PASSWORD= adminPass
     volumes:
       - ./mongo/data3:/data/db
       - ./mongo/key/keyfile.key:/key/keyfile.key
@@ -73,17 +63,17 @@ services:
     entrypoint:
       [
         "/usr/bin/mongod",
-        "--keyFile",
-        "/key/keyfile.key",
         "--replSet",
         "dbrs",
         "--bind_ip_all",
+        "--keyFile",
+        "/key/keyfile.key",
       ]
 
 volumes:
-  mongo1: {}
-  mongo2: {}
-  mongo3: {}
+  data1: {}
+  data2: {}
+  data3: {}
 
 networks:
   mongo-network:

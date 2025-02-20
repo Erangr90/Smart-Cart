@@ -16,6 +16,9 @@ docker compose -f docker-compose-mongo.yml down || {
     exit 1
 }
 
+echo "****** Waiting for ${DELAY} seconds for the containers go down ******"
+sleep $DELAY
+
 
 
 # Check if smart-cart-network exists if not create one
@@ -33,7 +36,7 @@ sleep $DELAY
 
 
 # Start Mongodb replication containers
-docker compose -f docker-compose-mongo.yml --env-file .env.mongo-variables up --build -d || {
+docker compose -f docker-compose-mongo.yml --env-file ./.env.mongo-variables up --build -d || {
     echo "Error: Failed to start mongo containers"
     exit 1
 }
@@ -44,7 +47,7 @@ sleep $DELAY
 
 
 # Initialize the Mongodb replica set
-docker exec mongo1 bash -c "/scripts/rs-init.sh" || {
+docker exec mongo1 bash -c "./scripts/rs-init.sh" || {
     echo "Error: Failed to initialize mongo replica set"
     exit 1
 }
