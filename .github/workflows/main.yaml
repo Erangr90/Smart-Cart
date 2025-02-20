@@ -28,10 +28,10 @@ jobs:
         run: |-
           docker push grady305/smart-cart-api:latest
           docker push grady305/smart-cart-frontend:latest
-          docker push grady305/smart-cart-mongo:latest
+          docker push grady305/smart-cart-mongo-rs:latest
           docker push grady305/smart-cart-nginx:latest
 
           docker push grady305/smart-cart-api:${{ env.SHA }}
           docker push grady305/smart-cart-frontend:${{ env.SHA }}
-          docker push grady305/smart-cart-mongo:${{ env.SHA }}
+          docker push grady305/smart-cart-mongo-rs:${{ env.SHA }}
           docker push grady305/smart-cart-nginx:${{ env.SHA }}
