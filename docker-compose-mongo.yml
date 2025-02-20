@@ -2,58 +2,65 @@ version: "3"
 services:
   mongo1:
     container_name: mongo1
-    image: mongo:latest
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile.dev
     env_file:
       - ./.env.mongo-variables
     environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME= '${MONGO_INITDB_ROOT_USERNAME}'
+      - MONGO_INITDB_ROOT_PASSWORD= '${MONGO_INITDB_ROOT_PASSWORD}'
     volumes:
-      - ./scripts/rs-init.sh:/scripts/rs-init.sh
       - ./mongo/data1:/data/db
     networks:
       - smart-cart-network
       - mongo-network
     ports:
-      - 27017:27017
+      - 127.0.10.1:27017:27017
     restart: unless-stopped
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
   mongo2:
     container_name: mongo2
-    image: mongo:latest
-    env_file:
-      - ./.env.mongo-variables
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile.dev
     volumes:
       - ./mongo/data2:/data/db
     ports:
-      - 27018:27018
+      - 127.0.10.2:27017:27017
     restart: unless-stopped
     networks:
       - mongo-network
       - smart-cart-network
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
   mongo3:
     container_name: mongo3
-    image: mongo:latest
-    env_file:
-      - ./.env.mongo-variables
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile.dev
     volumes:
       - ./mongo/data3:/data/db
     ports:
-      - 27019:27019
+      - 127.0.10.3:27017:27017
     restart: unless-stopped
     networks:
       - mongo-network
       - smart-cart-network
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
 volumes:
   data1: {}

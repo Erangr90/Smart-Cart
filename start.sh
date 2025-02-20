@@ -46,12 +46,6 @@ echo "****** Waiting for ${DELAY} seconds for Mongo containers to go up ******"
 sleep $DELAY
 
 
-# Initialize the Mongodb replica set
-docker exec mongo1 bash -c "./scripts/rs-init.sh" || {
-    echo "Error: Failed to initialize mongo replica set"
-    exit 1
-}
-
 
 # Start the application containers
 docker compose -f docker-compose-dev.yml up --build -d || {
