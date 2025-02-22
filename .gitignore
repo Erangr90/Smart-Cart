@@ -2,11 +2,15 @@
 /mongo/data2/
 /mongo/data3/
 /mongo/key/
+/mongo/mongo1config/
+/mongo/mongo2config/
+/mongo/mongo3config/
+/mongo/sharedconfig/
+/mongo/.env/
+
 
 
 /api/logs/
-/api/.env.development/
-
-/.env.mongo-variables/
+/api/.env/
 
 
