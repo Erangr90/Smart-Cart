@@ -21,17 +21,14 @@ jobs:
         run: |-
           docker build -t grady305/smart-cart-api:latest -t grady305/smart-cart-api:${{ env.SHA }} -f ./api/Dockerfile ./api
           docker build -t grady305/smart-cart-frontend:latest -t grady305/smart-cart-frontend:${{ env.SHA }} -f ./frontend/Dockerfile ./frontend
-          docker build -t grady305/smart-cart-mongo-rs:latest -t grady305/smart-cart-mongo-rs:${{ env.SHA }} -f ./mongo/Dockerfile ./mongo
           docker build -t grady305/smart-cart-nginx:latest -t grady305/smart-cart-nginx:${{ env.SHA }} -f ./nginx/Dockerfile ./nginx
 
       - name: Push images
         run: |-
           docker push grady305/smart-cart-api:latest
           docker push grady305/smart-cart-frontend:latest
-          docker push grady305/smart-cart-mongo-rs:latest
           docker push grady305/smart-cart-nginx:latest
 
           docker push grady305/smart-cart-api:${{ env.SHA }}
           docker push grady305/smart-cart-frontend:${{ env.SHA }}
-          docker push grady305/smart-cart-mongo-rs:${{ env.SHA }}
           docker push grady305/smart-cart-nginx:${{ env.SHA }}
