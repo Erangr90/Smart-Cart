@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'fs';
 
 const getMostAccessedEndpoints = (logFilePath, topN = 10) => {
     const logs = fs.readFileSync(logFilePath, 'utf-8').split('\n');
@@ -18,7 +18,7 @@ const getMostAccessedEndpoints = (logFilePath, topN = 10) => {
         .slice(0, topN);
 
     return sortedEndpoints;
-}
+};
 
 export default getMostAccessedEndpoints
 

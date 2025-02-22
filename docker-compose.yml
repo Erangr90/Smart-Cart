@@ -1,38 +1,30 @@
 version: "3"
 services:
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile.dev
+    image: grady305/smart-cart-api
+    mem_limit: 900m
+    hostname: api
     restart: unless-stopped
     networks:
       - smart-cart-network
     env_file:
       - path: ./api/.env
         required: true
-    volumes:
-      - /app/node_modules
-      - ./api:/app
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
+    image: grady305/smart-cart-frontend
+    mem_limit: 200m
+    hostname: frontend
     restart: unless-stopped
     networks:
       - smart-cart-network
     depends_on:
       - api
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app
-    environment:
-      - WDS_SOCKET_PORT=0
 
   nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile.dev
+    image: grady305/smart-cart-nginx
+    mem_limit: 200m
+    hostname: nginx
     depends_on:
       - api
       - frontend
