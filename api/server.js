@@ -28,11 +28,7 @@ const app = express();
 
 connectDB();
 
-if (process.env.NODE_ENV === 'tests') {
-  dotenv.config({ path: '.env.tests' });
-} else {
-  dotenv.config({ path: '.env.development' });
-}
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
