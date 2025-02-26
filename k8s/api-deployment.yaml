@@ -19,19 +19,36 @@ spec:
             - containerPort: 7743
           env:
             - name: NODE_ENV
-              value: redis-cluster-ip-service
-            - name: REDIS_PORT
-              value: '6379'
-            - name: PGUSER
-              value: postgres
-            - name: PGHOST
-              value: postgres-cluster-ip-service
-            - name: PGPORT
-              value: '5432'
-            - name: PGDATABASE
-              value: postgres
-            - name: PGPASSWORD
+              value: production
+            - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: pgpassword
-                  key: PGPASSWORD
+                  key: mongo-user
+                  name: api-secret
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mongo-password
+                  name: api-secret
+            - name: DB_NAME
+              value: SmartCartDb
+            - name: MONGO_URI
+              value: mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/?replicaSet=rs0
+            - name: PORT
+              value: "7743"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: jwt-secret
+                  name: api-secret
+            - name: ENCRYP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: encryp-key
+                  name: api-secret
+            - name: LOG_FILE_ROTATION
+              value: 30d
+            - name: LOG_FILE_SIZE
+              value: 50M
+            - name: PAGINATION_LIMIT
+              value: "20"
