@@ -35,6 +35,5 @@ jobs:
 
       - name: Apply k8s manifest
         run: |-
-          # kubectl apply -f k8s
           kubectl set image deployments/api-deployment api=grady305/smart-cart-api:${{ env.SHA }}
           kubectl set image deployments/frontend-deployment frontend=grady305/smart-cart-frontend:${{ env.SHA }}
