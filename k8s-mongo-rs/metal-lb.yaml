@@ -1,11 +1,11 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: first-pool
+  name: smart-cart-pool
   namespace: metallb-system
 spec:
   addresses:
-    - 192.168.7.200-192.168.7.210
+    - 192.168.65.200-192.168.65.210
 
 ---
 apiVersion: metallb.io/v1beta1
