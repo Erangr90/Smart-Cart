@@ -16,6 +16,7 @@ import unitOfMeasureRoutes from "./routes/unitOfMeasureRoutes.js";
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import logger, { systemLogStream } from "./middleware/loggerMiddleware.js";
+import { CreateAdminUser } from "./utils/adminUser.js";
 
 
 
@@ -58,7 +59,7 @@ app.get('/', (req, res) => {
   res.send('API is running....');
 });
 
-
+app.use(CreateAdminUser);
 app.use(notFound);
 app.use(errorHandler);
 
