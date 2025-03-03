@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   let user = null;
   // Check validation
-  if (isValidUser(req, body)) {
+  if (isValidUser(req.body)) {
     const { email, password, firstName, lastName } = req.body;
     // Check if user Exists
     const userExists = await User.findOne({ email });
