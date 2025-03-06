@@ -5,7 +5,7 @@ Giving you the cheapest groceries cart at the nearest location.
 Multi services web application with a Node.js REST API includes JWT tokens authentication and refreshment, Requests logger for analysis, secured MongoDB replicas set with user’s permissions management, and Nginx server for load balancer. Include admin operations to control the data.
 Frontend developed using React, Redux tool kit and Bootstrap.
 
-# Create `.env` file at the api directory and add the following:
+### Create `.env` file at the api directory and add the following:
 
 ```
 NODE_ENV= development
@@ -22,7 +22,7 @@ PAGINATION_LIMIT= 20
 
 ```
 
-# Modify the users-init script to your database and users permission:
+### Modify the users-init script to your database and users permission:
 
 ```
 
@@ -49,7 +49,7 @@ db.getSiblingDB("admin").createUser(
 
 ```
 
-# Create `.env` file at the mongo directory for and add the following:
+### Create `.env` file at the mongo directory for and add the following:
 
 ```
 MONGO_INITDB_ROOT_USERNAME= adminUser
@@ -57,6 +57,6 @@ MONGO_INITDB_ROOT_PASSWORD= adminPass
 
 ```
 
-# Run
+### Run
 
 ./Start.sh

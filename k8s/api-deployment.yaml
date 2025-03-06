@@ -33,7 +33,7 @@ spec:
             - name: DB_NAME
               value: SmartCartDb
             - name: MONGO_URI
-              value: mongodb://mongo-cluster-ip:27017
+              value: mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/
             - name: PORT
               value: "7743"
             - name: JWT_SECRET
