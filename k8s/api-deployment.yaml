@@ -21,10 +21,7 @@ spec:
             - name: NODE_ENV
               value: production
             - name: MONGO_INITDB_ROOT_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: mongo-user
-                  name: api-secret
+              value: admin
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -52,3 +49,4 @@ spec:
               value: 50M
             - name: PAGINATION_LIMIT
               value: "20"
+
