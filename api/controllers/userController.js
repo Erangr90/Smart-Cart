@@ -28,9 +28,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       clicks: user.clicks,
       subscription: user.subscription,
-      carts: user.carts,
-      products: user.products,
-      orders: user.orders,
+      cart: user.cart,
       isSubtribe: user.isSubtribe,
       isAdmin: user.isAdmin,
     });
