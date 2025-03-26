@@ -100,11 +100,10 @@ const CartCalc = asyncHandler(async (req, res) => {
   for (const price of chain.prices) {
     for (const item of items) {
       if (price.product == item._id) {
-        sum += (item.qty * price.number).toFixed(2);
+        sum += (item.qty * price.number);
       }
     }
   }
-
   let arr = [...chain.stores];
 
   for (let i = 0; i < arr.length; i++) {

@@ -116,7 +116,7 @@ const ChainPricesList = () => {
         <>
           <h1>מחירים ברשת {chain.name}</h1>
           {
-            chain.image && <Image src={`/api/${chain.image}`} rounded className="w-25 m-1" />
+            chain.image && <Image src={`/api/${chain.image}`} rounded style={{ width: '12rem' }} />
           }
           <div className="d-flex justify-content-between">
             <Button type='button' variant='warning' className='my-3' onClick={createPriceHandler}>

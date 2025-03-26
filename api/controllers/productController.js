@@ -247,9 +247,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getTopViewsProducts = asyncHandler(async (req, res) => {
 
-  console.log("hereeeeeeeee");
 
-  let products = await Product.find({}).sort({ views: -1 }).limit(30).populate({
+  let products = await Product.find({}).sort({ views: -1 }).limit(15).populate({
     path: 'category',
     select: '-products',
   })
@@ -269,6 +268,10 @@ const getTopViewsProducts = asyncHandler(async (req, res) => {
       product.prices[1],
       product.prices[2],
     ];
+    // if (product.prices[0]) {
+    //   console.log(product.prices);
+
+    // }
     // Get store locations
     for (let price of product.prices) {
       if (price?.chain) {
@@ -280,7 +283,7 @@ const getTopViewsProducts = asyncHandler(async (req, res) => {
       }
     }
   }
-  console.log(products);
+  // console.log(products);
   return res.json(products);
 
 });

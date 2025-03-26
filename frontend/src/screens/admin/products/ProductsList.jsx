@@ -83,7 +83,6 @@ const ProductsList = () => {
                 <th>מדינה</th>
                 <th>ברקוד</th>
                 <th>כמות</th>
-                {/* <th>מחיר</th> */}
                 <th></th>
               </tr>
             </thead>
@@ -99,7 +98,6 @@ const ProductsList = () => {
                   <td>{product.country + " " + product.country_code}</td>
                   <td>{product.barcode}</td>
                   <td>{product.measure + " " + product.unitOfMeasure}</td>
-                  {/* <td>{product.price.number}</td> */}
                   <td>
                     <>
                       <LinkContainer

@@ -192,11 +192,20 @@ const Cart = () => {
               disabled={cartItems.length == 0}
             >
               <option defaultValue={""}>בחר רשת</option>
-              {chains?.chains.map((x) => (
+              {/* {chains?.chains.map((x) => (
                 <option value={x._id} key={x._id}>
                   {`${x.name}`}
                 </option>
-              ))}
+              ))} */}
+              <option value={chains?.chains[0]._id} key={chains?.chains[0]._id}>
+                {`${chains?.chains[0].name}`}
+              </option>
+              <option value={chains?.chains[1]._id} key={chains?.chains[1]._id}>
+                {`${chains?.chains[1].name}`}
+              </option>
+              <option value={chains?.chains[2]._id} key={chains?.chains[2]._id}>
+                {`${chains?.chains[2].name}`}
+              </option>
             </Form.Select>
           </Form.Group>
           <Form.Group>

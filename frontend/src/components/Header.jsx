@@ -51,7 +51,7 @@ const Header = () => {
     },
     {
       name: "מחירים",
-      route: "prices"
+      route: "prices/page/1"
     },
     {
       name: "מוצרים",

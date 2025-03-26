@@ -105,7 +105,6 @@ const router = createBrowserRouter(
         <Route path='/admin/chain/:id/edit' element={<EditChain />} />
         <Route path='/admin/chain/:id/prices' element={<ChainPricesList />} />
         {/* Prices */}
-        <Route path='/admin/prices' element={<PricesList />} />
         <Route path='/admin/prices/search/:keyword' element={<PricesList />} />
         <Route path='/admin/prices/page/:pageNumber' element={<PricesList />} />
         <Route

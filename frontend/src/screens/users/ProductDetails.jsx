@@ -52,7 +52,7 @@ const ProductDetails = () => {
 
 
 
-    console.log(product);
+
     return (
         <>
             <Link className='btn btn-light my-3' to='/'>
@@ -66,6 +66,7 @@ const ProductDetails = () => {
                 </Message>
             ) : (
                 <>
+                    {console.log(product.prices)}
                     <Row>
                         <Col md={3}>
                             <Image style={{ width: '20rem' }} src={`/api/${product.image}`} fluid />
@@ -83,7 +84,6 @@ const ProductDetails = () => {
                                     {product.measure}{" "}{product.unitOfMeasure}{" "}
                                     {product.country}{", "}{product.country_code}{"."}
                                 </ListGroup.Item>
-
                             </ListGroup>
                         </Col>
                         <Col md={3}>

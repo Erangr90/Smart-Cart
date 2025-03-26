@@ -44,7 +44,7 @@ const CreatePrice = () => {
         chainId,
         number,
       });
-      navigate(`/admin/prices`);
+      navigate(`/admin/prices/page/1`);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }

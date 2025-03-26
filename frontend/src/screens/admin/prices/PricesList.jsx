@@ -14,7 +14,7 @@ import Paginate from "../../../components/Paginate";
 import SearchBox from "../../../components/SearchBox";
 
 const PricesList = () => {
-  const { pageNumber, keyword } = useParams();
+  let { pageNumber, keyword } = useParams();
   const navigate = useNavigate();
   const { data, refetch, isLoading, error } = useGetPricesQuery({
     keyword,
@@ -24,7 +24,7 @@ const PricesList = () => {
 
   useEffect(() => {
     refetch();
-  }, [data]);
+  }, [data, pageNumber, keyword]);
 
   const [deletePrice] = useDeletePriceMutation();
 
@@ -63,7 +63,7 @@ const PricesList = () => {
       ) : (
         <>
           <div className="d-flex justify-content-between">
-            <SearchBox route={"/admin/prices"} />
+            <SearchBox route={"/admin/prices"} pageNumber={pageNumber = 1} />
             <Button type='button' variant='warning' className='my-3' onClick={createPriceHandler}>
               צור מחיר חדש
             </Button>
@@ -114,6 +114,7 @@ const PricesList = () => {
           </Table>
           <Paginate
             page={data.page}
+            keyword={keyword || ""}
             pages={data.pages}
             isAdmin={true}
             route={"prices"}

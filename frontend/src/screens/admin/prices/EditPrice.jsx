@@ -36,7 +36,7 @@ const EditPrices = () => {
       await updatePrice({ priceId, store, chain, number, product });
       toast.success('Price updated successfully');
       refetch();
-      navigate('/admin/prices');
+      navigate('/admin/prices/page/1');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
