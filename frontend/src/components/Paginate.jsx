@@ -14,8 +14,9 @@ const Paginate = ({ pages, page, keyword = '', route }) => {
           >
             <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
           </LinkContainer>
-        ))}
-      </Pagination>
+        ))
+        }
+      </Pagination >
     )
   );
 };

@@ -24,41 +24,91 @@ const getProducts = asyncHandler(async (req, res) => {
       ],
     }
     : {};
-  // Query to search by category
-  const categoryQuery = req.query.category || null;
+
   let count = null;
   let products = null;
-  // Case search by category
-  if (categoryQuery) {
-    const category = await Category.findOne({ name: categoryQuery });
-    // Count number of elements
-    count = await Product.countDocuments({ category: category._id });
-    // Find elements with pagination
-    products = await Product.find({ category: category._id }).limit(pageSize).skip(pageSize * (page - 1))
-      .populate({
-        path: 'category',
-        select: '-products',
-      })
-      .populate({
-        path: 'prices',
-        select: '-product'
-      });
-    // Normal case
-  } else {
-    // Count number of elements
-    count = await Product.countDocuments({ ...keyword });
-    // Find elements with pagination
-    products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1))
-      .populate({
-        path: 'category',
-        select: '-products',
-      })
-      .populate({
-        path: 'prices',
-        select: '-product'
-      });
+  // Count number of elements
+  count = await Product.countDocuments({ ...keyword });
+  // Find elements with pagination
+  products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1))
+    .populate({
+      path: 'category',
+      select: '-products',
+    })
+    .populate({
+      path: 'prices',
+      select: '-product',
+      populate: {
+        path: 'chain',
+        select: '-prices',
+        populate: {
+          path: 'stores',
+          select: '-prices',
+        }
+      }
+    });
 
-    products = sortByCategory(products);
+  products = await sortByCategory(products);
+  for (let product of products) {
+    product.prices = await sortByPrice(product.prices);
+  }
+
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+});
+// @desc    Fetch products by query by user
+// @route   GET /products/query
+// @access  Admin
+const getProductsByUser = asyncHandler(async (req, res) => {
+  // PAGINATION
+  const pageSize = process.env.PAGINATION_LIMIT;
+  const page = Number(req.query.pageNumber) || 1;
+  // Keyword to search
+  const keyword = req.query.keyword
+    ? {
+      $or: [
+        { name: { $regex: req.query.keyword, $options: 'i' } },
+        { manufacturer: { $regex: req.query.keyword, $options: 'i' } },
+        { description: { $regex: req.query.keyword, $options: 'i' } },
+        { barcode: { $regex: req.query.keyword, $options: 'i' } },
+        { country: { $regex: req.query.keyword, $options: 'i' } },
+        { country_code: { $regex: req.query.keyword, $options: 'i' } },
+      ],
+    }
+    : {};
+
+  let count = null;
+  let products = null;
+  // Count number of elements
+  count = await Product.countDocuments({ ...keyword });
+  // Find elements with pagination
+  products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1))
+    .populate({
+      path: 'category',
+      select: '-products',
+    })
+    .populate({
+      path: 'prices',
+      select: '-product',
+      populate: {
+        path: 'chain',
+        select: '-prices',
+        populate: {
+          path: 'stores',
+          select: '-prices',
+        }
+      }
+    });
+
+  products = await sortByCategory(products);
+  for (let product of products) {
+    product.prices = await sortByPrice(product.prices);
+  }
+  for (let product of products) {
+    product.prices = [
+      product.prices[0],
+      product.prices[1],
+      product.prices[2]
+    ];
   }
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
@@ -85,11 +135,46 @@ const getProductById = asyncHandler(async (req, res) => {
         path: 'store chain'
       }
     });
-  product.prices = sortByPrice(product.prices);
   if (!product) {
     res.status(404);
     throw new Error("Product Not found");
   }
+  product.prices = await sortByPrice(product.prices);
+  return res.json(product);
+});
+
+// @desc    Fetch single product by User
+// @route   GET /products/:id/prices
+// @access  Subscribe
+const getProductByIdByUser = asyncHandler(async (req, res) => {
+  // Request validation
+  if (!req.params || !req.params.id) {
+    res.status(400);
+    throw new Error("Invalid request");
+  }
+  let product = await Product.findById(req.params.id)
+    .populate({
+      path: 'category',
+      select: '-products',
+    })
+    .populate({
+      path: 'prices',
+      select: '-product',
+      populate: {
+        path: 'store chain'
+      }
+    });
+  if (!product) {
+    res.status(404);
+    throw new Error("Product Not found");
+  }
+  product.prices = await sortByPrice(product.prices);
+  product.prices = [
+    product.prices[0],
+    product.prices[1],
+    product.prices[2],
+  ];
+
   return res.json(product);
 });
 
@@ -119,7 +204,7 @@ const getProductTopPrices = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Product Not found");
   }
-  product.prices = sortByPrice(product.prices);
+  product.prices = await sortByPrice(product.prices);
   product.prices = [
     product.prices[0],
     product.prices[1],
@@ -248,7 +333,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const getTopViewsProducts = asyncHandler(async (req, res) => {
 
 
-  let products = await Product.find({}).sort({ views: -1 }).limit(15).populate({
+  let products = await Product.find({}).sort({ views: -1 }).limit(30).populate({
     path: 'category',
     select: '-products',
   })
@@ -262,7 +347,7 @@ const getTopViewsProducts = asyncHandler(async (req, res) => {
     });
 
   for (let product of products) {
-    product.prices = sortByPrice(product.prices);
+    product.prices = await sortByPrice(product.prices);
     product.prices = [
       product.prices[0],
       product.prices[1],
@@ -328,7 +413,9 @@ export {
   deleteProduct,
   getProductTopPrices,
   getTopViewsProducts,
-  updateProductViews
+  updateProductViews,
+  getProductsByUser,
+  getProductByIdByUser
 };
 // --------------------------------------- Help Functions ------------------------------------
 function sortByCategory(arr) {

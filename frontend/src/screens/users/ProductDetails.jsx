@@ -12,7 +12,7 @@ import {
     Form,
 } from 'react-bootstrap';
 import {
-    useGetProductDetailsQuery,
+    useGetProductDetailsByUserQuery,
     useUpdateProductViewsMutation
 } from '../../slices/productsApiSlice';
 import Loader from '../../components/Loader';
@@ -48,7 +48,7 @@ const ProductDetails = () => {
         isLoading,
         refetch,
         error,
-    } = useGetProductDetailsQuery(productId);
+    } = useGetProductDetailsByUserQuery(productId);
 
 
 
@@ -78,11 +78,16 @@ const ProductDetails = () => {
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     {product.description}{", "}{product.manufacturer}{"."}
-
-                                </ListGroup.Item>
-                                <ListGroup.Item>
+                                    <br />
                                     {product.measure}{" "}{product.unitOfMeasure}{" "}
                                     {product.country}{", "}{product.country_code}{"."}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    {product.prices[0].number.toFixed(2)}{` ש"ח `}{product.prices[0].chain.name}
+                                    <br />
+                                    {product.prices[1].number.toFixed(2)}{` ש"ח `}{product.prices[1].chain.name}
+                                    <br />
+                                    {product.prices[2].number.toFixed(2)}{` ש"ח `}{product.prices[2].chain.name}
                                 </ListGroup.Item>
                             </ListGroup>
                         </Col>

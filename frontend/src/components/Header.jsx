@@ -2,7 +2,7 @@ import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import logo from "../assets/logo.png";
@@ -10,11 +10,13 @@ import {
   useGetAllCategoriesQuery
 } from "../slices/categoriesApiSlice";
 import { useEffect, useState } from 'react';
+import SearchBox from "./SearchBox";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
   const [dbCategories, setDbCategories] = useState([]);
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ const Header = () => {
     error: categoriesError,
     refetch: categoryRefetch,
   } = useGetAllCategoriesQuery();
+
+
 
   useEffect(() => {
     if (categories) {
@@ -99,6 +103,7 @@ const Header = () => {
                   </Navbar.Brand>
                 </LinkContainer>
               ) : null}
+              <SearchBox route={""} pageNumber={1} variant={"outline-light"} />
 
               <Nav className="me-auto">
                 {userInfo ? (
