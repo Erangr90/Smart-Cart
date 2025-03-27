@@ -43,7 +43,7 @@ const getCategories = asyncHandler(async (req, res) => {
 
 });
 
-// @desc    Fetch all categories per Page
+// @desc    Fetch all categories
 // @route   GET /categories
 // @access  Subscribe
 const getAllCategories = asyncHandler(async (req, res) => {

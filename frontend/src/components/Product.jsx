@@ -22,8 +22,11 @@ const Product = ({ product }) => {
             console.log("Geolocation is not available in your browser.");
         }
         setDis(product.prices);
+    }, [position, product]);
 
-    }, [position]);
+
+
+
 
     const sortByDis = (arr) => {
         return arr.sort((a, b) => {
@@ -39,36 +42,43 @@ const Product = ({ product }) => {
 
 
     const setDis = (prices) => {
-        let arr = [];
-        for (let price of prices) {
-            if (price?.store) {
-                let dis = distance(position.latitude, price?.store.location.latitude, position.longitude, price?.store.location.longitude).toFixed(2);
-                arr.push({
-                    ...price.store,
-                    dis: dis
-                });
-            } else {
-                let tempStores = [];
-                if (price?.chain) {
-                    for (let store of price?.chain?.stores) {
-                        let dis = distance(position.latitude, store?.location.latitude, position.longitude, store?.location.longitude).toFixed(2);
-                        tempStores.push({
-                            ...store,
-                            dis: dis
-                        });
+        try {
+            let arr = [];
+            for (let price of prices) {
+                if (price?.store) {
+                    let dis = distance(position.latitude, price?.store.location.latitude, position.longitude, price?.store.location.longitude).toFixed(2);
+                    arr.push({
+                        ...price.store,
+                        dis: dis
+                    });
+                } else {
+                    let tempStores = [];
+                    if (price?.chain) {
+                        for (let store of price?.chain?.stores) {
+                            let dis = distance(position.latitude, store?.location.latitude, position.longitude, store?.location.longitude).toFixed(2);
+                            tempStores.push({
+                                ...store,
+                                dis: dis
+                            });
+                        }
+                        tempStores = sortByDis(tempStores);
+                        arr.push(tempStores[0]);
+
                     }
-                    tempStores = sortByDis(tempStores);
-                    arr.push(tempStores[0]);
 
                 }
-
             }
-        }
-        setStores(arr);
+            setStores(arr);
 
+
+
+        } catch (error) {
+            console.log(error);
+        }
     };
     return (
         <>
+            {/* {console.log("from product component", product)} */}
             {product.prices[0] &&
                 <Card style={{ width: '14rem' }} className="flex-item">
 
