@@ -13,4 +13,7 @@
 /api/logs/
 /api/.env/
 
+/frontend/node_modules/
+/api/node_modules/
+
 
