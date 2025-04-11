@@ -333,7 +333,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const getTopViewsProducts = asyncHandler(async (req, res) => {
 
 
-  let products = await Product.find({}).sort({ views: -1 }).limit(30).populate({
+  let products = await Product.find({}).sort({ views: -1 }).limit(15).populate({
     path: 'category',
     select: '-products',
   })

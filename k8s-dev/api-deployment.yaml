@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: api
+  template:
+    metadata:
+      labels:
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: grady305/smart-cart-api
+          ports:
+            - containerPort: 7743
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: admin
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mongo-password
+                  name: api-secret
+            - name: DB_NAME
+              value: SmartCartDb
+            - name: MONGO_URI
+              value: mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/
+            - name: PORT
+              value: "7743"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: jwt-secret
+                  name: api-secret
+            - name: ENCRYP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: encryp-key
+                  name: api-secret
+            - name: LOG_FILE_ROTATION
+              value: 30d
+            - name: LOG_FILE_SIZE
+              value: 50M
+            - name: PAGINATION_LIMIT
+              value: "20"
+

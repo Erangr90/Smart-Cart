@@ -26,16 +26,15 @@ connectDB();
 
 const importData = async () => {
   try {
-    await Order.deleteMany();
-    await Product.deleteMany();
+    // await Product.deleteMany();
     // await Chain.deleteMany();
     // await Store.deleteMany();
-    await Cart.deleteMany();
-    await Category.deleteMany();
-    await Subscription.deleteMany();
-    await UnitOfMeasure.deleteMany();
-    await User.deleteMany();
-    await BlackToken.deleteMany();
+    // await Cart.deleteMany();
+    // await Category.deleteMany();
+    // await Subscription.deleteMany();
+    // await UnitOfMeasure.deleteMany();
+    // await User.deleteMany();
+    // await BlackToken.deleteMany();
 
     await User.insertMany(users);
     await Subscription.insertMany(subscription);
@@ -100,9 +99,8 @@ const importData = async () => {
 
 const destroyData = async () => {
   try {
-    await Order.deleteMany();
-    // await Product.deleteMany();
-    // await Chain.deleteMany();
+    await Product.deleteMany();
+    await Chain.deleteMany();
     await Store.deleteMany();
     await Cart.deleteMany();
     await Category.deleteMany();

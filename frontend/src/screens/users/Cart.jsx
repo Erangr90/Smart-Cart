@@ -79,6 +79,7 @@ const Cart = () => {
         if (userInfo.clicks.numOfClicks >= 40 && totalDiff == 0) {
           toast.error("עברת את המכסה החודשית שלך");
         } else if (userInfo.clicks.numOfClicks >= 40 && totalDiff > 0) {
+          console.log("adsssssssssss");
           const clicks = {
             date: new Date(),
             numOfClicks: 1
@@ -106,15 +107,14 @@ const Cart = () => {
           } catch (err) {
             toast.error(err?.data?.message || err.error);
           }
-        }
-
-      } else {
-        try {
-          const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
-          setSum(res2.sum);
-          setStore(res2.store);
-        } catch (err) {
-          toast.error(err?.data?.message || err.error);
+        } else {
+          try {
+            const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+            setSum(res2.sum);
+            setStore(res2.store);
+          } catch (err) {
+            toast.error(err?.data?.message || err.error);
+          }
         }
 
       }
