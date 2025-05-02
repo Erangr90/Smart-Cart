@@ -32,6 +32,8 @@ const Cart = () => {
   const [store, setStore] = useState({});
   const [position, setPosition] = useState({ latitude: null, longitude: null });
 
+  const numOfClicks = 10;
+
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
@@ -76,46 +78,108 @@ const Cart = () => {
         const MonthDiff = Math.abs((today.getMonth() + 1) - (userDate.getMonth() + 1));
         const totalDiff = Math.floor(yearsDiffPerMonth + MonthDiff);
 
-        if (userInfo.clicks.numOfClicks >= 40 && totalDiff == 0) {
-          toast.error("עברת את המכסה החודשית שלך");
-        } else if (userInfo.clicks.numOfClicks >= 40 && totalDiff > 0) {
-          console.log("adsssssssssss");
-          const clicks = {
-            date: new Date(),
-            numOfClicks: 1
-          };
+        if (totalDiff > 0) {
           try {
+            const clicks = {
+              date: new Date(),
+              numOfClicks: 1
+            };
             const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
             dispatch(updateUserInfo({ ...res1 }));
             const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
             setSum(res2.sum);
             setStore(res2.store);
           } catch (err) {
-            toast.error(err?.data?.message || err.error);
+            console.log(err?.data?.message || err.error || err);
           }
-        } else if (userInfo.clicks.numOfClicks < 40 && totalDiff == 0) {
-          const clicks = {
-            date: userInfo.clicks.date,
-            numOfClicks: userInfo.clicks.numOfClicks + 1
-          };
-          try {
-            const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
-            dispatch(updateUserInfo({ ...res1 }));
-            const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
-            setSum(res2.sum);
-            setStore(res2.store);
-          } catch (err) {
-            toast.error(err?.data?.message || err.error);
-          }
+
+
         } else {
-          try {
-            const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
-            setSum(res2.sum);
-            setStore(res2.store);
-          } catch (err) {
-            toast.error(err?.data?.message || err.error);
+          if (userInfo.clicks.numOfClicks >= numOfClicks) {
+            toast.error("עברת את המכסה החודשית שלך");
+            navigate("/subscriptions");
+          } else {
+            try {
+              const clicks = {
+                date: userInfo.clicks.date,
+                numOfClicks: userInfo.clicks.numOfClicks + 1
+              };
+              const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
+              dispatch(updateUserInfo({ ...res1 }));
+              const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+              setSum(res2.sum);
+              setStore(res2.store);
+              navigate("/cart");
+
+            } catch (err) {
+              console.log(err?.data?.message || err.error || err);
+            }
+
           }
         }
+
+        // if (userInfo.clicks.numOfClicks >= numOfClicks && totalDiff == 0) {
+        //   toast.error("עברת את המכסה החודשית שלך");
+        //   navigate("/subscriptions");
+        // } else if (userInfo.clicks.numOfClicks < numOfClicks && totalDiff > 0) {
+        //   const clicks = {
+        //     date: new Date(),
+        //     numOfClicks: 1
+        //   };
+        //   try {
+        //     const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
+        //     dispatch(updateUserInfo({ ...res1 }));
+        //     const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+        //     setSum(res2.sum);
+        //     setStore(res2.store);
+        //   } catch (err) {
+        //     toast.error(err?.data?.message || err.error);
+        //   }
+        // } else if (userInfo.clicks.numOfClicks < numOfClicks && totalDiff == 0) {
+        //   const clicks = {
+        //     date: userInfo.clicks.date,
+        //     numOfClicks: userInfo.clicks.numOfClicks + 1
+        //   };
+        //   try {
+        //     const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
+        //     dispatch(updateUserInfo({ ...res1 }));
+        //     const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+        //     setSum(res2.sum);
+        //     setStore(res2.store);
+        //   } catch (err) {
+        //     toast.error(err?.data?.message || err.error);
+        //   }
+        // } else if (userInfo.clicks.numOfClicks >= numOfClicks && totalDiff > 0) {
+        //   const clicks = {
+        //     date: new Date(),
+        //     numOfClicks: 1
+        //   };
+        //   try {
+        //     const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
+        //     dispatch(updateUserInfo({ ...res1 }));
+        //     const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+        //     setSum(res2.sum);
+        //     setStore(res2.store);
+        //   } catch (err) {
+        //     toast.error(err?.data?.message || err.error);
+        //   }
+        // }
+        // else {
+        //   console.log("else");
+        //   const clicks = {
+        //     date: userInfo.clicks.date,
+        //     numOfClicks: userInfo.clicks.numOfClicks + 1
+        //   };
+        //   try {
+        //     const res1 = await updateUserClicks({ ...userInfo, clicks, userId: userInfo._id }).unwrap();
+        //     dispatch(updateUserInfo({ ...res1 }));
+        //     const res2 = await calcCart({ chainId, cartItems, position }).unwrap();
+        //     setSum(res2.sum);
+        //     setStore(res2.store);
+        //   } catch (err) {
+        //     toast.error(err?.data?.message || err.error);
+        //   }
+        // }
 
       }
     } else {

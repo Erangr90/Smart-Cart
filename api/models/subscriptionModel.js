@@ -44,12 +44,6 @@ const subscriptionSchema = mongoose.Schema(
         message: props => `${props.value} is not valid`
       }
     },
-    products: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-      }
-    ]
   },
   {
     timestamps: true,

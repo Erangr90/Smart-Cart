@@ -40,6 +40,7 @@ import ChainPricesList from './screens/admin/chains/ChainPricesList';
 import ProductDetails from "./screens/users/ProductDetails";
 import Cart from "./screens/users/Cart";
 import CategoryScreen from './screens/users/CategoryScreen';
+import SubscriptionsScreen from './screens/users/SubscriptionsScreen';
 import store from './store';
 import { Provider } from 'react-redux';
 
@@ -56,6 +57,7 @@ const router = createBrowserRouter(
       />
       <Route path='/product/:id' element={<ProductDetails />} />
       <Route path='/category/:id' element={<CategoryScreen />} />
+      <Route path='/subscriptions' element={<SubscriptionsScreen />} />
       {/* Auth */}
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
