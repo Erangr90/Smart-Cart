@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.20
+FROM node:lts-alpine
 WORKDIR "/app"
 COPY ./package.json ./
 RUN npm install --omit=dev
